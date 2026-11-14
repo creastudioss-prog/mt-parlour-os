@@ -594,6 +594,8 @@ em.rn{font-family:var(--display);font-style:italic;text-transform:none;letter-sp
    CATÁLOGO Y REGLAS (simulado; María Teresa lo ajusta)
    ===================================================================== */
 const OPEN=10*60, CLOSE=18*60, STEP=30, HOLD_MIN=30;
+/* Horario por día (0=domingo). Lo usa también el servidor para la reserva pública. */
+const HOURS={0:[10*60,14*60],1:[10*60,18*60],2:[10*60,18*60],3:[10*60,18*60],4:[10*60,18*60],5:[10*60,18*60],6:[10*60,18*60]};
 const CATS=['Faciales','Masajes','Wax · Mujeres','Wax · Hombres','HIFU'];
 const S=(id,cat,name,dur,price)=>({id,cat,name,dur,price});
 const SERVICES=[
@@ -668,8 +670,8 @@ const SOURCES=['web','Instagram','Facebook','Google','Referida','WhatsApp','Pana
 const DEFAULT_SETTINGS={deposit:25,monthlyGoal:6000,taxRate:0.08875,fullPayAfterNoShows:2,refundHours:24,
   referral:{giver:15,receiver:10},staff:[{id:'mt',name:'María Teresa',commission:0,role:'Dueña'}],
   channels:{email:'simulado',sms:'pendiente A2P',whatsapp:'en espera',pana:'simulado',meta:'simulado',google:'simulado',stripe:'simulado',quickbooks:'pendiente'},
-  templates:[{t:'Precios',m:'¡Hola! Nuestros precios van desde $85 el facial. Cada ritual se confirma en consulta de piel. Reserva aquí: mtaesthetics.nyc/reservar'},
-    {t:'Horario',m:'Atendemos de lunes a sábado de 10am a 6pm, solo con cita. Una clienta a la vez. Reserva en mtaesthetics.nyc/reservar'},
+  templates:[{t:'Precios',m:'¡Hola! Nuestros precios van desde $85 el facial. Cada ritual se confirma en consulta de piel. Reserva aquí: mtaesthetics.org/reservas'},
+    {t:'Horario',m:'Atendemos de lunes a sábado de 10am a 6pm y domingos de 10am a 2pm, solo con cita. Una clienta a la vez. Reserva en mtaesthetics.org/reservas'},
     {t:'Ubicación',m:'Estamos en New York. Te enviamos la dirección exacta al confirmar tu cita.'},
     {t:'Gracias',m:'¡Gracias por tus palabras! Nos alegra muchísimo. Te esperamos pronto en el parlour 🤍'}],
   autoBrief:false};
@@ -743,9 +745,9 @@ const ACTIVE=new Set(['hold','confirmed','done','paid']);
 function busyOn(date){const out=[];
   D.bookings.forEach(b=>{if(b.date===date&&ACTIVE.has(effStatus(b)))out.push([toMin(b.start),toMin(b.start)+b.dur])});
   D.blocks.forEach(k=>{if(k.date===date)out.push([toMin(k.start),toMin(k.end)])}); return out}
-function slotsFor(date,dur){const d=parseYmd(date);if(d.getDay()===0)return [];
+function slotsFor(date,dur){const d=parseYmd(date);const H=HOURS[d.getDay()];if(!H)return [];
   const busy=busyOn(date),now=new Date(),isT=today()===date,nm=now.getHours()*60+now.getMinutes(),res=[];
-  for(let t=OPEN;t+dur<=CLOSE;t+=STEP){if(isT&&t<nm+60)continue;if(busy.some(([a,b])=>t<b&&t+dur>a))continue;res.push(t)}return res}
+  for(let t=H[0];t+dur<=H[1];t+=STEP){if(isT&&t<nm+60)continue;if(busy.some(([a,b])=>t<b&&t+dur>a))continue;res.push(t)}return res}
 function upcomingDays(n,from){const out=[];const d=from?parseYmd(from):new Date();d.setHours(0,0,0,0);for(let i=0;i<n;i++){out.push(new Date(d));d.setDate(d.getDate()+1)}return out}
 function weekRange(off=0){const d=new Date();d.setHours(0,0,0,0);const dow=(d.getDay()+6)%7;const a=new Date(d);a.setDate(d.getDate()-dow+off*7);const b=new Date(a);b.setDate(a.getDate()+6);return [ymd(a),ymd(b)]}
 const hoursUntil=b=>(new Date(parseYmd(b.date).getTime()+toMin(b.start)*6e4)-Date.now())/36e5;
@@ -1076,7 +1078,7 @@ RENDER.agenda=()=>{
   return `<div class="mhead"><div><span class="eyebrow">Agenda</span><h1>${esc(longDate(OS.day))}</h1></div>
     <div class="mhead__a"><button class="btn" data-x="block">Bloquear horario</button><button class="btn btn--pri" data-x="manual">+ Cita</button></div></div>
   <div class="panel"><div class="strip">${days.map(d=>{const k=ymd(d),n=D.bookings.filter(b=>b.date===k&&ACTIVE.has(effStatus(b))).length;
-    return `<button data-day="${k}" aria-pressed="${k===OS.day}"><span>${k===today()?'hoy':DOW[d.getDay()]}</span><b>${d.getDate()}</b><i class="${n?'has':''}">${d.getDay()===0?'cerrado':n?n+' cita'+(n>1?'s':''):''}</i></button>`}).join('')}</div>
+    return `<button data-day="${k}" aria-pressed="${k===OS.day}"><span>${k===today()?'hoy':DOW[d.getDay()]}</span><b>${d.getDate()}</b><i class="${n?'has':''}">${!HOURS[d.getDay()]?'cerrado':n?n+' cita'+(n>1?'s':''):''}</i></button>`}).join('')}</div>
     <div class="panel__h"><span class="muted small">${open?`${items.filter(i=>i.k==='b'&&ACTIVE.has(effStatus(i.b))).length} citas · ${free} espacios de 1 hora libres`:'Domingo · cerrado'}</span><span class="muted small">${wl.length?`<b style="color:var(--copper-ink)">${wl.length} en lista de espera</b> · `:''}Horario 10am – 6pm</span></div>
     ${items.length?items.map(it=>it.k==='k'?`<div class="blockrow"><span><b class="num">${hm12(toMin(it.x.start))}–${hm12(toMin(it.x.end))}</b> · Bloqueado${it.x.reason?' · '+esc(it.x.reason):''}</span><button class="btn btn--sm btn--ghost" data-unblock="${it.x.id}">Quitar</button></div>`:apptRow(it.b)).join('')
       :`<div class="panel__b"><div class="empty">${open?'Sin citas este día. Las reservas de la web aparecen aquí al momento, o puedes agregar una cita.':'El parlour está cerrado los domingos.'}</div></div>`}
@@ -1115,7 +1117,7 @@ function openCancel(b,noshow){const h=hoursUntil(b),st=SET();const early=h>=st.r
     async()=>{const ref=!!$('cx-ref')?.checked;
       await addLog(b,(noshow?'No llegó':'Cancelada')+(paid?(ref?` · depósito de ${money(b.deposit)} devuelto`:` · se retiene el depósito de ${money(b.deposit)}`):''),{status:noshow?'noshow':'cancelled',depositRefunded:paid&&ref});
       await skipFUsFor(b.id);
-      if($('cx-wl')?.checked){for(const w of wl){await addFU({type:'waitlist',due:today(),clientName:w.name,waitlistId:w.id,channel:'sms',message:`Hola ${first(w.name)}, se liberó un horario el ${longDate(b.date)} a las ${hm12(toMin(b.start))}. Si lo quieres, resérvalo aquí antes de que se ocupe: mtaesthetics.nyc/reservar`});await store.patch('waitlist',w.id,{status:'avisada',notifiedAt:nowIso()})}
+      if($('cx-wl')?.checked){for(const w of wl){await addFU({type:'waitlist',due:today(),clientName:w.name,waitlistId:w.id,channel:'sms',message:`Hola ${first(w.name)}, se liberó un horario el ${longDate(b.date)} a las ${hm12(toMin(b.start))}. Si lo quieres, resérvalo aquí antes de que se ocupe: mtaesthetics.org/reservas`});await store.patch('waitlist',w.id,{status:'avisada',notifiedAt:nowIso()})}
         toast(`Horario liberado · se avisó a ${wl.length} de la lista de espera`)}else toast(noshow?'Marcada como no llegó':'Cita cancelada · horario liberado')});
 }
 /* =====================================================================
@@ -1197,14 +1199,14 @@ RENDER.agenda=()=>{
   const hourLabels=[];for(let h=OPEN/60;h<=CLOSE/60;h++)hourLabels.push(`<span style="top:${(h*60-OPEN)/60*HP}px">${h===12?'12 pm':h>12?(h-12)+' pm':h+' am'}</span>`);
   const H=(CLOSE-OPEN)/60*HP;
   const nowM=new Date().getHours()*60+new Date().getMinutes();
-  const col=k=>{const closed=parseYmd(k).getDay()===0;
+  const col=k=>{const closed=!HOURS[parseYmd(k).getDay()];
     const ev=D.bookings.filter(b=>b.date===k&&!['cancelled','noshow','expired'].includes(effStatus(b))).map(b=>{const st=effStatus(b);const c=byId('clients',b.clientId);const cf=contraFor(b.serviceId,c?.flags||b.flags);const warn=cf.block.length||(needsConsent(b.serviceId)&&!b.consentId&&['hold','confirmed'].includes(st));
       return `<button class="ev ${st}" style="--evc:${catVar(b.category)};top:${(toMin(b.start)-OPEN)/60*HP+1}px;height:${Math.max(b.dur/60*HP-3,22)}px" data-appt="${b.id}" title="${esc(b.client?.name)} · ${esc(b.serviceName)}">${warn?'<i class="flag" aria-label="Necesita atención"></i>':''}${b.dur<=45?`<b><span class="tm">${hm12(toMin(b.start))}${st==='paid'?' ✓':''}</span> ${esc(b.client?.name)}</b>${b.dur>30?`<small>${esc(b.serviceName)}</small>`:''}`:`<span class="tm">${hm12(toMin(b.start))}${st==='paid'?' ✓':st==='done'?' · por cobrar':st==='hold'?' · sin pagar':''}</span><b>${esc(b.client?.name)}</b><small>${esc(b.serviceName)}</small>`}</button>`}).join('');
     const bl=D.blocks.filter(x=>x.date===k).map(x=>`<div class="ev blk" style="top:${(toMin(x.start)-OPEN)/60*HP+1}px;height:${(toMin(x.end)-toMin(x.start))/60*HP-3}px"><span class="tm" style="color:var(--muted)">${hm12(toMin(x.start))}</span><b>${esc(x.reason||'Bloqueado')}</b><button class="btn btn--sm btn--ghost" data-unblock="${x.id}" style="justify-self:start;padding:1px 6px;font-size:11px">Quitar</button></div>`).join('');
     const now=k===t&&nowM>=OPEN&&nowM<=CLOSE?`<div class="nowline" style="top:${(nowM-OPEN)/60*HP}px"></div>`:'';
     return `<div class="wk__col ${closed?'closed':''} ${k===t?'today':''}" data-slotday="${k}" style="height:${H}px">${ev}${bl}${now}</div>`};
   const grid=`<div class="wk"><div class="wk__scroll"><div class="wk__in" style="--cols:${days.length};--hp:${HP/2}px;${days.length===1?'min-width:0':''}">
-    <div class="wk__hd" style="cursor:default"></div>${days.map(k=>{const d=parseYmd(k);return `<div class="wk__hd ${k===t?'today':''} ${d.getDay()===0?'closed':''}" data-dayview="${k}">${DOW[d.getDay()]}<b>${d.getDate()}</b></div>`}).join('')}
+    <div class="wk__hd" style="cursor:default"></div>${days.map(k=>{const d=parseYmd(k);return `<div class="wk__hd ${k===t?'today':''} ${!HOURS[d.getDay()]?'closed':''}" data-dayview="${k}">${DOW[d.getDay()]}<b>${d.getDate()}</b></div>`}).join('')}
     <div class="wk__hours" style="height:${H}px">${hourLabels.join('')}</div>${days.map(col).join('')}
   </div></div></div>`;
   // mini calendario del mes
@@ -1317,7 +1319,7 @@ async function onServiceFinished(b){
   const t=today(),cid=b.clientId,nm=first(b.client?.name),base={clientId:cid,clientName:b.client?.name,bookingId:b.id};
   await addFU({...base,type:'postcare',due:addDays(t,1),message:`Hola ${nm}, ¿cómo sentiste la piel después de tu ${b.serviceName}? Recuerda hidratar, usar protector solar y evitar exfoliantes por 48 horas. — María Teresa`});
   await addFU({...base,type:'survey',due:addDays(t,1),message:`${nm}, ¿cómo calificarías tu visita del 1 al 5? Tu respuesta llega directo a María Teresa: mtaesthetics.nyc/encuesta`});
-  if(!activePkgs(cid).some(p=>p.serviceId===b.serviceId)) await addFU({...base,type:'rebook',due:addDays(b.date,REBOOK_DAYS[b.category]||30),message:`Hola ${nm}, ya es buen momento para tu próximo ${b.category==='Consulta'?'tratamiento':b.serviceName}. Reserva aquí: mtaesthetics.nyc/reservar`});
+  if(!activePkgs(cid).some(p=>p.serviceId===b.serviceId)) await addFU({...base,type:'rebook',due:addDays(b.date,REBOOK_DAYS[b.category]||30),message:`Hola ${nm}, ya es buen momento para tu próximo ${b.category==='Consulta'?'tratamiento':b.serviceName}. Reserva aquí: mtaesthetics.org/reservas`});
 }
 function openConsent(b){const s=SVC[b.serviceId];let pad;
   dialog(`<div class="dlg__h"><h2>Consentimiento</h2><button type="button" data-close aria-label="Cerrar">×</button></div>
@@ -1338,7 +1340,7 @@ function openMove(b){const s=SVC[b.serviceId];
     <p class="err" id="mv-err" hidden></p><button class="btn btn--pri btn--block" type="submit">Mover y avisar a la clienta</button>`,
     async()=>{const d=$('mv-d').value,t=toMin($('mv-t').value),e=$('mv-err');
       const busy=busyOn(d).filter(([a,z])=>!(a===toMin(b.start)&&d===b.date));
-      if(parseYmd(d).getDay()===0||t+s.dur>CLOSE||busy.some(([a,z])=>t<z&&t+s.dur>a)){e.textContent='Ese horario no está libre.';e.hidden=false;return false}
+      {const H=HOURS[parseYmd(d).getDay()];if(!H||t<H[0]||t+s.dur>H[1]){e.textContent='Fuera del horario de ese día.';e.hidden=false;return false}}if(busy.some(([a,z])=>t<z&&t+s.dur>a)){e.textContent='Ese horario no está libre.';e.hidden=false;return false}
       await addLog(b,`Movida de ${shortD(b.date)} ${hm12(toMin(b.start))} a ${shortD(d)} ${hm12(t)}`,{date:d,start:toHM(t)});
       await skipFUsFor(b.id);await scheduleReminders({...b,date:d,start:toHM(t)});
       await addFU({type:'reminder24',due:today(),clientId:b.clientId,clientName:b.client?.name,bookingId:b.id,message:`Hola ${first(b.client?.name)}, tu cita de ${b.serviceName} quedó para el ${longDate(d)} a las ${hm12(t)}. ¡Te esperamos!`});
@@ -1383,15 +1385,24 @@ function openClient(cid){const c=byId('clients',cid);if(!c)return;const s=client
     <div class="row2"><div class="field"><label for="cl-src">Cómo llegó</label><select class="inp" id="cl-src">${SOURCES.map(o=>`<option ${o===c.source?'selected':''}>${o}</option>`).join('')}</select></div><div class="field"><span class="lbl">Código de referida</span><p class="num" style="padding:10px 0"><b>${esc(refCode(c))}</b> · ${refs.length} referida${refs.length===1?'':'s'}</p></div></div>
     <div class="field"><span class="lbl">Salud y alertas</span><div class="checks">${HEALTH.map((x,i)=>`<label class="chk"><input type="checkbox" class="cl-flag" id="cl-f${i}" value="${esc(x)}" ${(c.flags||[]).includes(x)?'checked':''}>${esc(x)}</label>`).join('')}</div></div>
     <label class="chk"><input type="checkbox" id="cl-mkt" ${c.marketingOk?'checked':''}> Autoriza usar sus fotos en redes</label>
-    <div class="field"><label for="cl-notes">Notas de María Teresa</label><textarea class="inp" id="cl-notes" placeholder="Productos que usa, reacciones, preferencias…">${esc(c.notes)}</textarea></div>
+    <div class="field"><span class="lbl">App de la clienta</span><div class="acts" style="margin:0"><button class="btn btn--sm btn--pri" type="button" data-portal="wa" data-cid="${cid}">Enviar su app por WhatsApp</button><button class="btn btn--sm btn--ghost" type="button" data-portal="copy" data-cid="${cid}">Copiar enlace</button></div><p class="small muted">${c.portalToken?'Ya tiene su enlace personal.':'Todavía no tiene enlace: se crea al enviarlo.'} En su app ve sus citas, las cambia, firma consentimientos y ve sus cuidados.</p></div>
+    <div class="field"><label for="cl-share">Nota para la clienta <span class="muted">(la ve en su app)</span></label><textarea class="inp" id="cl-share" placeholder="Ej.: Sigue con el sérum en las noches y protector cada mañana. Nos vemos en 4 semanas.">${esc(c.sharedNote||'')}</textarea></div>
+    <div class="field"><label for="cl-notes">Notas de María Teresa <span class="muted">(privadas)</span></label><textarea class="inp" id="cl-notes" placeholder="Productos que usa, reacciones, preferencias…">${esc(c.notes)}</textarea></div>
     ${pks.length||mb?`<div class="field"><span class="lbl">Paquetes y membresía</span>${pks.map(p=>`<div class="ln"><span>${esc(p.name)}</span><span class="num">${p.used}/${p.sessions} usadas</span></div><div class="prog"><span style="width:${p.used/p.sessions*100}%"></span></div>`).join('')}${mb?`<div class="ln"><span>${MEMB.name} · desde ${shortD(mb.startedAt)}</span><span>${mb.lastUsedMonth===today().slice(0,7)?'facial del mes usado':'facial del mes disponible'}</span></div>`:''}</div>`:''}
-    <div class="field"><span class="lbl">Sesiones</span>${sessions.length?`<div class="timeline">${sessions.slice(0,10).map(b=>{const ph=photos.filter(p=>p.bookingId===b.id);return `<div><time>${shortD(b.date)} · ${esc(b.serviceName)}</time>${b.sessionNotes?esc(b.sessionNotes):'<span class="muted">Sin notas</span>'}${b.sessionParams?`<br><span class="mini">${esc(b.sessionParams)}</span>`:''}${ph.length?`<div class="photos" style="margin-top:6px">${ph.map(p=>`<figure><img src="${p.data}" alt="Foto ${esc(p.kind)}"><figcaption>${esc(p.kind)}${p.marketingOk?' · redes ✓':''}</figcaption></figure>`).join('')}</div>`:''}</div>`}).join('')}</div>`:'<p class="muted small">Sin sesiones todavía.</p>'}</div>
+    <div class="field"><span class="lbl">Sesiones</span>${sessions.length?`<div class="timeline">${sessions.slice(0,10).map(b=>{const ph=photos.filter(p=>p.bookingId===b.id);return `<div><time>${shortD(b.date)} · ${esc(b.serviceName)}</time>${b.sessionNotes?esc(b.sessionNotes):'<span class="muted">Sin notas</span>'}${b.sessionParams?`<br><span class="mini">${esc(b.sessionParams)}</span>`:''}${ph.length?`<div class="photos" style="margin-top:6px">${ph.map(p=>`<figure><img src="${p.data}" alt="Foto ${esc(p.kind)}"><figcaption>${esc(p.kind)}${p.marketingOk?' · redes ✓':''} <button type="button" class="btn btn--sm btn--ghost" data-sharephoto="${p.id}" title="Mostrar esta foto en la app de la clienta">${p.shared?'En su app ✓':'Mostrar en su app'}</button></figcaption></figure>`).join('')}</div>`:''}</div>`}).join('')}</div>`:'<p class="muted small">Sin sesiones todavía.</p>'}</div>
     <div class="field"><span class="lbl">Consentimientos firmados</span>${cons.length?cons.map(x=>`<div class="ln"><span>${esc(x.serviceName)} · ${shortD(x.signedAt)} · ${esc(x.via||'')}</span><button type="button" class="btn btn--sm btn--ghost" data-viewcons="${x.id}">Ver</button></div>`).join(''):'<p class="muted small">Ninguno.</p>'}</div>
     ${surveys.length?`<div class="field"><span class="lbl">Encuestas</span>${surveys.map(f=>`<p class="small">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)} ${esc(f.comment||'')}</p>`).join('')}</div>`:''}
     <div class="acts"><button class="btn btn--pri" type="submit">Guardar ficha</button></div>`,
     async()=>{await store.patch('clients',cid,{phone:$('cl-phone').value.trim(),email:$('cl-email').value.trim(),ig:$('cl-ig').value.trim(),birthday:$('cl-bd').value,skinType:$('cl-skin').value,source:$('cl-src').value,
-      flags:[...document.querySelectorAll('.cl-flag:checked')].map(i=>i.value),notes:$('cl-notes').value.trim(),marketingOk:$('cl-mkt').checked});toast('Ficha guardada')},true);
+      flags:[...document.querySelectorAll('.cl-flag:checked')].map(i=>i.value),notes:$('cl-notes').value.trim(),sharedNote:$('cl-share').value.trim(),marketingOk:$('cl-mkt').checked});toast('Ficha guardada')},true);
 }
+/* Enlace personal de la app de la clienta (lo usa la página /c/<token> del servidor) */
+async function portalLink(cid,mode){const c=byId('clients',cid);if(!c)return;let t=c.portalToken;
+  if(!t){const a=new Uint8Array(18);crypto.getRandomValues(a);t=btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');await store.patch('clients',cid,{portalToken:t})}
+  const url=location.origin+'/c/'+t;
+  if(mode==='copy'){try{await navigator.clipboard.writeText(url);toast('Enlace copiado')}catch(e){prompt('Enlace de la clienta:',url)}return}
+  const ph=digits(c.phone);const msg=`Hola ${first(c.name)}, esta es tu app de MT Aesthetics: ahí ves tus citas, reservas, firmas tu consentimiento y tienes tus cuidados en casa. Guárdala en tu pantalla de inicio: ${url}`;
+  window.open('https://wa.me/'+(ph.length===10?'1'+ph:ph)+'?text='+encodeURIComponent(msg),'_blank')}
 function viewConsent(id){const x=byId('consents',id);if(!x)return;
   dialog(`<div class="dlg__h"><h2>Consentimiento</h2><button type="button" data-close aria-label="Cerrar">×</button></div><div class="consent" style="max-height:none">${esc(x.text)}</div>
     <img src="${x.signature}" alt="Firma de ${esc(x.clientName)}" style="background:#fff;border-radius:8px;border:1px solid var(--line)"><p class="small muted">Firmado por ${esc(x.clientName)} el ${new Date(x.signedAt).toLocaleString('es-US')} · ${esc(x.via||'')}${x.medicalAuth?' · con autorización médica':''}</p>`,async()=>{});
@@ -1443,14 +1454,14 @@ function openCampaign(pre){const segs=campaignSegs();
   const who=()=>{const [,,a]=segs.find(s=>s[0]===$('k-seg').value);$('k-who').textContent=a.length?a.slice(0,6).map(c=>c.name).join(', ')+(a.length>6?` y ${a.length-6} más`:''):'Nadie en este grupo todavía.'};
   $('k-seg').onchange=who;who();
   $('k-ai').onclick=async()=>{const [,l]=segs.find(s=>s[0]===$('k-seg').value);$('k-aist').textContent='Escribiendo…';$('k-ai').disabled=true;
-    try{const r=await sample.json(`Eres la voz de MT Aesthetics · The Parlour, un parlour de estética en Nueva York (Maria Teresa, 20 años de oficio, una clienta a la vez; tono cálido, elegante, directo, sin exageraciones ni emojis). Escribe una oferta por email en español para este grupo de clientas: "${l}". ${$('k-offer').value.trim()?'La oferta: '+$('k-offer').value.trim()+'.':'Propón una oferta razonable para ese grupo.'} Usa {nombre} para el nombre. Máximo 70 palabras, termina invitando a reservar en mtaesthetics.nyc/reservar. Responde solo con JSON: {"name":"nombre corto","offer":"la oferta en una línea","message":"el mensaje"}`,{modelTier:'quick',cache:false});
+    try{const r=await sample.json(`Eres la voz de MT Aesthetics · The Parlour, un parlour de estética en Nueva York (Maria Teresa, 20 años de oficio, una clienta a la vez; tono cálido, elegante, directo, sin exageraciones ni emojis). Escribe una oferta por email en español para este grupo de clientas: "${l}". ${$('k-offer').value.trim()?'La oferta: '+$('k-offer').value.trim()+'.':'Propón una oferta razonable para ese grupo.'} Usa {nombre} para el nombre. Máximo 70 palabras, termina invitando a reservar en mtaesthetics.org/reservas. Responde solo con JSON: {"name":"nombre corto","offer":"la oferta en una línea","message":"el mensaje"}`,{modelTier:'quick',cache:false});
       if(r?.name&&!$('k-name').value)$('k-name').value=r.name; if(r?.offer&&!$('k-offer').value)$('k-offer').value=r.offer; if(r?.message)$('k-msg').value=r.message; $('k-aist').textContent='';
     }catch(e){$('k-aist').textContent=aiErr(e)} finally{$('k-ai').disabled=false}};
 }
 async function birthdays(){const t=today();const list=D.clients.filter(c=>c.birthday&&c.birthday.slice(5)>=t.slice(5)&&c.birthday.slice(5)<=addDays(t,7).slice(5));
   if(!list.length){toast('No hay cumpleaños esta semana.');return}
   for(const c of list){if(D.followups.some(f=>f.type==='birthday'&&f.clientId===c.id&&isoDay(f.createdAt)>=addDays(t,-30)))continue;
-    await addFU({type:'birthday',due:t.slice(0,4)+c.birthday.slice(4),clientId:c.id,clientName:c.name,message:`¡Feliz cumpleaños, ${first(c.name)}! Tu regalo: 15% en tu próximo ritual este mes. Reserva en mtaesthetics.nyc/reservar — María Teresa`})}
+    await addFU({type:'birthday',due:t.slice(0,4)+c.birthday.slice(4),clientId:c.id,clientName:c.name,message:`¡Feliz cumpleaños, ${first(c.name)}! Tu regalo: 15% en tu próximo ritual este mes. Reserva en mtaesthetics.org/reservas — María Teresa`})}
   toast(`Mensajes de cumpleaños programados para ${list.length} clienta${list.length>1?'s':''}`);OS.segTab='prox';go('seguimiento');
 }
 function openSurvey(f){let r=5;
@@ -1623,7 +1634,7 @@ async function receiveOrder(o){for(const i of o.items){const p=byId('products',i
 /* =====================================================================
    FINANZAS
    ===================================================================== */
-function occupancy(a,b){let open=0,used=0;for(let d=a;d<=b;d=addDays(d,1)){if(parseYmd(d).getDay()===0)continue;open+=CLOSE-OPEN;
+function occupancy(a,b){let open=0,used=0;for(let d=a;d<=b;d=addDays(d,1)){{const H=HOURS[parseYmd(d).getDay()];if(!H)continue;open+=H[1]-H[0];}
   D.blocks.filter(k=>k.date===d).forEach(k=>open-=toMin(k.end)-toMin(k.start));
   D.bookings.filter(x=>x.date===d&&['confirmed','done','paid'].includes(x.status)).forEach(x=>used+=x.dur)}return {pct:open?Math.round(used/open*100):0,hours:used/60}}
 RENDER.finanzas=()=>{
@@ -1819,7 +1830,7 @@ $('main').addEventListener('click',async e=>{
   if(t.dataset.wlbook){const w=byId('waitlist',t.dataset.wlbook);openManual(null,{wl:w});return}
   if(t.dataset.wlnotify){const w=byId('waitlist',t.dataset.wlnotify);const s=SVC[w.serviceId];let found=null;for(const d of upcomingDays(14,w.date&&w.date>=today()?w.date:today())){const sl=slotsFor(ymd(d),s.dur);if(sl.length){found=[ymd(d),sl[0]];break}}
     if(!found){toast('No hay horarios libres en 2 semanas.');return}
-    await addFU({type:'waitlist',due:today(),clientName:w.name,waitlistId:w.id,channel:'sms',message:`Hola ${first(w.name)}, tenemos un horario para tu ${s.name}: ${longDate(found[0])} a las ${hm12(found[1])}. Resérvalo aquí: mtaesthetics.nyc/reservar`});
+    await addFU({type:'waitlist',due:today(),clientName:w.name,waitlistId:w.id,channel:'sms',message:`Hola ${first(w.name)}, tenemos un horario para tu ${s.name}: ${longDate(found[0])} a las ${hm12(found[1])}. Resérvalo aquí: mtaesthetics.org/reservas`});
     await store.patch('waitlist',w.id,{status:'avisada',notifiedAt:nowIso()});toast('Aviso listo en Seguimiento');return}
   if(t.dataset.delstaff){const st=SET();await saveSettings({staff:st.staff.filter(s=>s.id!==t.dataset.delstaff)});return}
   if(t.dataset.deltpl!==undefined){const st=SET();await saveSettings({templates:st.templates.filter((_,i)=>i!==+t.dataset.deltpl)});return}
@@ -1842,10 +1853,10 @@ $('main').addEventListener('click',async e=>{
       if(a==='ignore'){await store.patch('social',s.id,{status:'ignored'});toast('Listo')}
       if(a==='lead'){const nm=s.authorName||('@'+s.author);const cid=await upsertClient({name:nm,ig:'@'+s.author,source:PLAT[s.platform]||s.platform,notes:`Escribió en ${PLAT[s.platform]}: “${s.text}”`});
         await store.patch('social',s.id,{clientId:cid});
-        await addFU({type:'lead',clientId:cid,clientName:nm,due:today(),channel:'dm',message:`Hola, te escribo de MT Aesthetics. Vi tu mensaje y me encantaría ayudarte. Puedes reservar tu horario aquí: mtaesthetics.nyc/reservar`});
+        await addFU({type:'lead',clientId:cid,clientName:nm,due:today(),channel:'dm',message:`Hola, te escribo de MT Aesthetics. Vi tu mensaje y me encantaría ayudarte. Puedes reservar tu horario aquí: mtaesthetics.org/reservas`});
         toast('Guardada en Clientas con un mensaje para hoy')}
       if(a==='ai'){t.disabled=true;const old=ta.value;ta.value='Escribiendo sugerencia…';
-        try{const r=await sample.json(`Eres María Teresa de MT Aesthetics · The Parlour (estética en NYC, 20 años de oficio, una clienta a la vez, reservas en mtaesthetics.nyc/reservar). Precios de referencia: ${snapshot().servicios}. Responde a ${s.platform==='google'?`esta reseña de Google de ${s.rating} estrellas (si es mala, agradece, pide disculpas sin excusas e invita a hablar en privado)`:`este ${s.kind==='dm'?'mensaje directo':'comentario público'} de ${PLAT[s.platform]}`}. Tono cálido, breve (máx. 45 palabras), en el idioma de la persona. Si quiere reservar, invítala con el link. Clasifica la intención: reservar, pregunta, elogio, queja, spam, resena. Responde solo JSON {"intent":"...","reply":"..."}.\n\nTexto: "${s.text}"${s.post?`\nPublicación: ${s.post}`:''}`,{modelTier:'quick',cache:false});
+        try{const r=await sample.json(`Eres María Teresa de MT Aesthetics · The Parlour (estética en NYC, 20 años de oficio, una clienta a la vez, reservas en mtaesthetics.org/reservas). Precios de referencia: ${snapshot().servicios}. Responde a ${s.platform==='google'?`esta reseña de Google de ${s.rating} estrellas (si es mala, agradece, pide disculpas sin excusas e invita a hablar en privado)`:`este ${s.kind==='dm'?'mensaje directo':'comentario público'} de ${PLAT[s.platform]}`}. Tono cálido, breve (máx. 45 palabras), en el idioma de la persona. Si quiere reservar, invítala con el link. Clasifica la intención: reservar, pregunta, elogio, queja, spam, resena. Responde solo JSON {"intent":"...","reply":"..."}.\n\nTexto: "${s.text}"${s.post?`\nPublicación: ${s.post}`:''}`,{modelTier:'quick',cache:false});
           ta.value=r?.reply||old; if(r?.intent&&INTENT[r.intent]&&r.intent!==s.intent&&s.platform!=='google')await store.patch('social',s.id,{intent:r.intent,draft:ta.value});
         }catch(err){ta.value=old;toast(aiErr(err)||'No se pudo sugerir')}finally{t.disabled=false}}}
     if(t.dataset.inv){const p=byId('products',t.dataset.id);if(t.dataset.inv==='in')openRestock(p);else openMoves(p)}
@@ -1878,6 +1889,8 @@ function dialog(html,onSubmit,wide){
     if(b.dataset.act){d.hidden=true;doAct(b.dataset.act,b.dataset.id);return}
     if(b.dataset.client&&b.dataset.client!==''){d.hidden=true;openClient(b.dataset.client);return}
     if(b.dataset.viewcons){viewConsent(b.dataset.viewcons);return}
+    if(b.dataset.portal){portalLink(b.dataset.cid,b.dataset.portal);return}
+    if(b.dataset.sharephoto){const ph=byId('photos',b.dataset.sharephoto);if(ph){store.patch('photos',ph.id,{shared:!ph.shared});b.textContent=!ph.shared?'En su app ✓':'Mostrar en su app'}return}
     if(b.dataset.signnow){d.hidden=true;openConsent(byId('bookings',b.dataset.signnow));return}
     if(b.dataset.delpost){store.del('content',b.dataset.delpost);d.hidden=true;toast('Publicación borrada');return}
     if(b.dataset.exp){d.hidden=true;exportData(b.dataset.exp);return}
@@ -1898,8 +1911,8 @@ function openManual(cid,opt={}){const c=cid?byId('clients',cid):null;const w=opt
     <p id="m-warn"></p><p class="err" id="m-err" hidden></p><button class="btn btn--pri btn--block" type="submit">Guardar cita</button>`,
     async()=>{const s=SVC[$('m-svc').value],date=$('m-date').value,start=$('m-time').value,name=$('m-name').value.trim(),err=$('m-err');
       const fail=m=>{err.textContent=m;err.hidden=false;return false};
-      if(!date||!name)return fail('Falta el día o el nombre.');if(parseYmd(date).getDay()===0)return fail('Los domingos el parlour está cerrado.');
-      const t=toMin(start);if(t+s.dur>CLOSE)return fail('Ese ritual no cabe antes del cierre (6pm).');
+      if(!date||!name)return fail('Falta el día o el nombre.');const HH=HOURS[parseYmd(date).getDay()];if(!HH)return fail('Ese día el parlour está cerrado.');
+      const t=toMin(start);if(t<HH[0]||t+s.dur>HH[1])return fail('Ese ritual no cabe en el horario de ese día ('+hm12(HH[0])+' a '+hm12(HH[1])+').');
       if(busyOn(date).some(([a,b])=>t<b&&t+s.dur>a))return fail('Ese horario choca con otra cita o un bloqueo.');
       const ex=D.clients.find(x=>x.name.toLowerCase()===name.toLowerCase())||findClient($('m-phone').value);
       if(ex){const cf=contraFor(s.id,ex.flags);if(cf.block.length)return fail(`Contraindicación: ${ex.name} marcó “${cf.block[0].f}”. ${cf.block[0].why}.`)}

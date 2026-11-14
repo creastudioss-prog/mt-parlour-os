@@ -64,7 +64,7 @@ function readBody(req, limit = 4 * 1024 * 1024) {
     req.on('error', reject);
   });
 }
-const MIME = { '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.ico': 'image/x-icon' };
+const MIME = { '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.ico': 'image/x-icon' };
 function serveFile(res, file, cache = 'public, max-age=86400') {
   fs.readFile(file, (err, buf) => {
     if (err) return send(res, 404, 'No encontrado', 'text/plain; charset=utf-8');
@@ -106,6 +106,7 @@ async function askClaude(input, tier) {
 }
 
 /* ---------- servidor ---------- */
+const publicApi = require('./public-api')({ store, save, send, readBody, PUB });
 const appHtml = () => fs.readFileSync(path.join(PUB, 'app.html'));
 let APP = appHtml();
 
@@ -115,6 +116,7 @@ http.createServer(async (req, res) => {
     const p = url.pathname;
     if (p === '/health') return send(res, 200, { ok: true });
     if (p === '/manifest.webmanifest' || p.startsWith('/icons/')) return serveFile(res, path.join(PUB, path.normalize(p).replace(/^(\.\.[/\\])+/, '')));
+    { const r = await publicApi(req, res, url); if (r !== null) return; }
     if (p === '/login' && req.method === 'GET') return send(res, 200, loginPage(), 'text/html; charset=utf-8');
     if (p === '/login' && req.method === 'POST') {
       const ip = (req.headers['x-forwarded-for'] || '').split(',')[0] || req.socket.remoteAddress;
@@ -134,7 +136,7 @@ http.createServer(async (req, res) => {
       res.writeHead(303, { location: '/login' }); return res.end();
     }
 
-    if (p === '/' || p === '/reservar' || p === '/index.html') return send(res, 200, APP, 'text/html; charset=utf-8');
+    if (p === '/' || p === '/index.html') return send(res, 200, APP, 'text/html; charset=utf-8');
 
     if (p === '/api/db' && req.method === 'GET') {
       const since = +url.searchParams.get('rev');

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mi parlour · MT Aesthetics</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1F2D24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MT Parlour">
+<link rel="apple-touch-icon" href="/pub/app-icon-180.png">
+<link rel="icon" href="/pub/app-icon-192.png">
+<link rel="manifest" id="mf">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=synonym@400,500,600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F4EFE6;--oat:#EFE4D2;--euc:#1F2D24;--euc2:#15211A;--copper:#A87C5C;--carbon:#1A1A1A;--line:rgba(26,26,26,.14);--serif:'Fraunces','Times New Roman',serif;--sans:'Synonym',system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--cream);color:var(--carbon);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+button,input,textarea{font:inherit;color:inherit}
+.hero{background:var(--euc);color:var(--cream);padding:calc(26px + env(safe-area-inset-top)) 22px 30px}
+.hero .in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.hero img{width:46px;height:auto}
+.hero small{display:block;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--copper)}
+.hero h1{font-family:var(--serif);font-weight:380;font-variation-settings:"opsz" 72;font-size:32px;line-height:1.05;margin:4px 0 0}
+.hero h1 em{color:var(--copper);font-style:italic}
+main{max-width:640px;margin:0 auto;padding:6px 18px 60px}
+section{margin-top:26px}
+.eb{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(26,26,26,.55);margin:0 0 10px;display:flex;gap:10px;align-items:baseline}
+.eb i{font-family:var(--serif);font-style:italic;letter-spacing:0;color:var(--copper);font-size:14px;text-transform:none}
+.card{background:#FBF8F3;border:1px solid var(--line);border-radius:16px;padding:18px}
+.card+.card{margin-top:10px}
+.appt b{display:block;font-family:var(--serif);font-weight:440;font-size:21px;font-variation-settings:"opsz" 24;line-height:1.2}
+.appt .when{margin:4px 0 0;font-size:15px}
+.appt .meta{font-size:13px;color:rgba(26,26,26,.6)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{border:0;border-radius:999px;padding:12px 18px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;background:var(--euc);color:var(--cream);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.btn--ghost{background:transparent;color:var(--euc);border:1px solid var(--line)}
+.btn--copper{background:var(--copper)}
+.btn--wide{width:100%}
+.btn[disabled]{opacity:.4}
+.tag{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:4px 10px;background:var(--oat);color:var(--euc);margin-top:10px}
+.tag--todo{background:#F3E2D3;color:#7A4A2C}
+.note{font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.45;font-variation-settings:"opsz" 18}
+.note::before{content:'“';color:var(--copper)}.note::after{content:'”';color:var(--copper)}
+ul.care{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+ul.care li{display:flex;gap:12px;font-size:15px}
+ul.care li span{font-family:var(--serif);font-style:italic;color:var(--copper);min-width:22px}
+.ln{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.ln:last-child{border-bottom:0}.ln small{color:rgba(26,26,26,.6)}
+.prog{height:4px;background:var(--oat);border-radius:4px;overflow:hidden;margin:2px 0 8px}.prog span{display:block;height:100%;background:var(--copper)}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.photos figure{margin:0}.photos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block}
+.photos figcaption{font-size:12px;color:rgba(26,26,26,.6);margin-top:4px;text-transform:capitalize}
+.install{background:var(--oat);border-radius:16px;padding:16px 18px;margin-top:18px;display:flex;gap:14px;align-items:center}
+.install img{width:44px;border-radius:10px}
+.install p{margin:0;font-size:14px}
+.install b{display:block;font-size:15px}
+.x{background:none;border:0;font-size:22px;line-height:1;padding:4px 6px;cursor:pointer;color:rgba(26,26,26,.5)}
+.empty{color:rgba(26,26,26,.6);font-size:15px;margin:0}
+.sheet{position:fixed;inset:0;background:rgba(21,33,26,.45);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet .p{background:var(--cream);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom))}
+.sheet h2{font-family:var(--serif);font-weight:420;font-size:24px;margin:0 0 4px}
+.days{display:flex;gap:8px;overflow-x:auto;margin:14px -18px;padding:2px 18px 8px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:60px;border:1px solid var(--line);background:#FBF8F3;border-radius:12px;padding:8px 0;text-align:center;cursor:pointer}
+.day span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,26,26,.55)}.day b{font-family:var(--serif);font-size:22px;font-weight:420}
+.day[aria-pressed=true]{background:var(--euc);color:var(--cream)}.day[aria-pressed=true] span{color:var(--cream)}.day[disabled]{opacity:.3}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-bottom:16px}
+.time{border:1px solid var(--line);background:#FBF8F3;border-radius:10px;padding:10px 0;cursor:pointer}
+.time[aria-pressed=true]{background:var(--euc);color:var(--cream)}
+.consent{white-space:pre-wrap;font-size:13px;background:#FBF8F3;border:1px solid var(--line);border-radius:12px;padding:14px;max-height:38vh;overflow:auto;margin:12px 0}
+.inp{width:100%;border:1px solid var(--line);background:#FBF8F3;border-radius:10px;padding:12px 14px;font-size:16px}
+.chk{display:flex;gap:10px;font-size:14px;margin:12px 0}.chk input{width:20px;height:20px;accent-color:var(--euc);flex:none}
+.err{background:#F6E3DC;color:#7A2E1F;border-radius:10px;padding:11px 13px;font-size:14px;margin:10px 0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--euc);color:var(--cream);padding:12px 18px;border-radius:999px;font-size:14px;z-index:30}
+.foot{text-align:center;font-size:13px;color:rgba(26,26,26,.55);margin-top:34px}
+.foot a{color:var(--euc)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="hero"><div class="in"><img src="/pub/mt-sello-cobre.svg" alt=""><div><small>MT Aesthetics · The Parlour</small><h1 id="hello">Tu <em>parlour</em></h1></div></div></header>
+<main id="app"><p class="empty" style="margin-top:24px">Cargando…</p></main>
+<div id="sheet" class="sheet" hidden></div>
+<div id="toast" class="toast" hidden></div>
+<script>
+const TOKEN=(location.pathname.match(/^\/c\/([A-Za-z0-9_-]{20,})/)||[])[1];
+document.getElementById('mf').href='/c/'+TOKEN+'/manifest.webmanifest';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DOW=['dom','lun','mar','mié','jue','vie','sáb'],MONL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const pd=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const longDate=s=>{const d=pd(s);return ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'][d.getDay()]+' '+d.getDate()+' de '+MONL[d.getMonth()]};
+const shortDate=s=>{const d=pd(s);return d.getDate()+' '+MONL[d.getMonth()].slice(0,3)+' '+d.getFullYear()};
+const h12=hm=>{let[h,m]=hm.split(':').map(Number);return ((h+11)%12+1)+':'+String(m).padStart(2,'0')+(h>=12?' pm':' am')};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2600)};
+let P=null,CAT=null;
+const api=async(path,body)=>{const r=await fetch('/api/c/'+TOKEN+path,body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}:{});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'No se pudo completar.');return j};
+const wa=(t)=>'https://wa.me/'+(P?P.whatsapp:'13474795229')+'?text='+encodeURIComponent(t);
+
+async function load(){
+  try{P=await api('')}catch(e){$('#app').innerHTML=`<section><div class="card"><p class="empty">${esc(e.message)}</p><div class="acts"><a class="btn" href="https://wa.me/13474795229?text=${encodeURIComponent('Hola María Teresa, necesito un enlace nuevo para mi app del parlour.')}">Escribir a María</a></div></div></section>`;return}
+  try{localStorage.setItem('mt-portal','/c/'+TOKEN)}catch(e){}
+  render();
+}
+function standalone(){return matchMedia('(display-mode: standalone)').matches||navigator.standalone}
+let deferred=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;P&&render()});
+function installBox(){
+  if(standalone())return '';try{if(localStorage.getItem('mt-install-x'))return ''}catch(e){}
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  return `<div class="install"><img src="/pub/app-icon-180.png" alt=""><p style="flex:1"><b>Guárdala en tu pantalla de inicio</b>${deferred?'Así la abres como una app.':ios?'En Safari toca <b style="display:inline">Compartir</b> y luego <b style="display:inline">“Agregar a inicio”</b>.':'Abre el menú del navegador y toca “Instalar app” o “Agregar a pantalla principal”.'}</p>${deferred?'<button class="btn" data-act="install">Instalar</button>':''}<button class="x" data-act="installx" aria-label="Cerrar">×</button></div>`;
+}
+function render(){
+  $('#hello').innerHTML=`Hola, <em>${esc(P.client.first)}</em>`;
+  const up=P.upcoming,secs=[];
+  secs.push(installBox());
+  secs.push(`<section><p class="eb">Próximas citas</p>${up.length?up.map(b=>`<div class="card appt"><b>${esc(b.serviceName)}</b><p class="when">${longDate(b.date)} · ${h12(b.start)}</p><span class="meta">${b.dur} min · con María Teresa</span>
+    ${b.needsConsent?(b.consentSigned?'<div><span class="tag">Consentimiento firmado</span></div>':'<div><span class="tag tag--todo">Falta firmar tu consentimiento</span></div>'):''}
+    <div class="acts">${b.needsConsent&&!b.consentSigned?`<button class="btn btn--copper" data-act="consent" data-id="${b.id}">Firmar</button>`:''}
+    ${b.canChange?`<button class="btn btn--ghost" data-act="move" data-id="${b.id}">Cambiar</button><button class="btn btn--ghost" data-act="cancel" data-id="${b.id}">Cancelar</button>`:`<a class="btn btn--ghost" href="${wa('Hola María Teresa, necesito hablar de mi cita del '+longDate(b.date)+'.')}">Escribir a María</a>`}
+    <a class="btn btn--ghost" href="data:text/calendar;charset=utf-8,${encodeURIComponent(ics(b))}" download="cita-mt-aesthetics.ics">Calendario</a></div>
+    ${!b.canChange?`<p class="meta" style="margin:10px 0 0">Faltan menos de ${P.policy.refundHours} horas: para cambios, escríbele a María.</p>`:''}</div>`).join(''):`<div class="card"><p class="empty">No tienes citas próximas.</p><div class="acts"><a class="btn" href="/reservar">Reservar</a></div></div>`}</section>`);
+  if(P.rebook)secs.push(`<section><p class="eb">Te toca volver <i>para mantener tus resultados</i></p><div class="card"><b style="font-family:var(--serif);font-weight:440;font-size:20px">${esc(P.rebook.serviceName)}</b><p class="when" style="margin:4px 0 0">Lo ideal: alrededor del ${longDate(P.rebook.due)}</p><div class="acts"><button class="btn" data-act="rebook">Reservar de nuevo</button></div></div></section>`);
+  if(P.note)secs.push(`<section><p class="eb">De María Teresa</p><div class="card"><p class="note" style="margin:0">${esc(P.note)}</p></div></section>`);
+  if(P.aftercare)secs.push(`<section><p class="eb">Cuidados en casa <i>${esc(P.aftercare.service)}</i></p><div class="card"><ul class="care">${P.aftercare.items.map((x,i)=>`<li><span>${['i','ii','iii','iv','v','vi'][i]}</span>${esc(x)}</li>`).join('')}</ul></div></section>`);
+  if(P.packages.length||P.membership)secs.push(`<section><p class="eb">Tus planes</p><div class="card">${P.packages.map(p=>`<div class="ln"><span>${esc(p.name)}</span><small>${p.sessions-p.used} de ${p.sessions} sesiones disponibles</small></div><div class="prog"><span style="width:${p.used/p.sessions*100}%"></span></div>`).join('')}${P.membership?`<div class="ln"><span>${esc(P.membership.name)}<br><small>${esc(P.membership.perks)}</small></span><small>${P.membership.usedThisMonth?'Facial del mes usado':'Facial del mes disponible'}</small></div>`:''}</div></section>`);
+  if(P.photos.length)secs.push(`<section><p class="eb">Tu progreso</p><div class="card"><div class="photos">${P.photos.map(f=>`<figure><img src="${esc(f.src)}" alt="Foto ${esc(f.kind)}" loading="lazy"><figcaption>${esc(f.kind)} · ${f.date?shortDate(f.date):''}</figcaption></figure>`).join('')}</div></div></section>`);
+  if(P.history.length)secs.push(`<section><p class="eb">Tu historial</p><div class="card">${P.history.map(h=>`<div class="ln"><span>${esc(h.serviceName)}</span><small>${shortDate(h.date)}</small></div>`).join('')}</div></section>`);
+  secs.push(`<section><div class="acts"><a class="btn btn--wide" href="/reservar">Reservar otro servicio</a><a class="btn btn--ghost btn--wide" href="${wa('Hola María Teresa, ')}">Escribir a María por WhatsApp</a></div></section>`);
+  secs.push(`<p class="foot">Este enlace es solo tuyo. No lo compartas.<br>MT Aesthetics · The Parlour · New York</p>`);
+  $('#app').innerHTML=secs.join('');
+}
+function ics(b){const[y,m,d]=b.date.split('-');const[h,mi]=b.start.split(':');const st=new Date(+y,m-1,+d,+h,+mi),en=new Date(st.getTime()+b.dur*6e4);
+  const f=x=>x.getFullYear()+String(x.getMonth()+1).padStart(2,'0')+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+String(x.getMinutes()).padStart(2,'0')+'00';
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MT Aesthetics//ES','BEGIN:VEVENT','UID:'+b.id+'@mtaesthetics','DTSTART;TZID=America/New_York:'+f(st),'DTEND;TZID=America/New_York:'+f(en),'SUMMARY:'+b.serviceName+' · MT Aesthetics','END:VEVENT','END:VCALENDAR'].join('\r\n')}
+function sheet(html){const s=$('#sheet');s.innerHTML=`<div class="p" role="dialog" aria-modal="true">${html}</div>`;s.hidden=false}
+function closeSheet(){$('#sheet').hidden=true}
+/* elegir día y hora (cambiar cita o reservar de nuevo) */
+const pick={mode:null,id:null,serviceId:null,date:null,time:null,slots:[],err:''};
+async function catalog(){if(!CAT){const r=await fetch('/api/public/catalog');CAT=await r.json()}return CAT}
+async function openPicker(mode,id,serviceId,title){
+  await catalog();Object.assign(pick,{mode,id,serviceId,date:null,time:null,slots:[],err:'',title});
+  let days={};try{days=(await (await fetch('/api/public/days?service='+serviceId)).json()).days||{}}catch(e){}
+  pick.days=days;drawPicker();
+}
+function drawPicker(){
+  const t0=pd(CAT.today),ds=[];for(let i=0;i<=CAT.policy.daysAhead;i++){const d=new Date(t0);d.setDate(t0.getDate()+i);ds.push(ymd(d))}
+  sheet(`<h2>${esc(pick.title)}</h2><p class="meta" style="margin:0;color:rgba(26,26,26,.6)">Escoge un día y una hora.</p>
+  <div class="days">${ds.map(k=>{const d=pd(k);const ok=pick.days[k]||pick.mode==='move';return `<button class="day" data-pday="${k}" ${ok?'':'disabled'} aria-pressed="${pick.date===k}"><span>${DOW[d.getDay()]}</span><b>${d.getDate()}</b></button>`}).join('')}</div>
+  ${pick.date?(pick.slots.length?`<div class="times">${pick.slots.map(t=>`<button class="time" data-ptime="${t}" aria-pressed="${pick.time===t}">${h12(t)}</button>`).join('')}</div>`:'<p class="empty" style="margin-bottom:16px">No quedan horarios ese día.</p>'):''}
+  ${pick.err?`<div class="err">${esc(pick.err)}</div>`:''}
+  <div class="acts"><button class="btn btn--ghost" data-act="close">Cerrar</button><button class="btn" data-act="pickok" ${pick.time?'':'disabled'}>${pick.mode==='move'?'Cambiar cita':'Reservar'}</button></div>`);
+}
+async function openConsent(id){
+  let text='';try{text=(await api('/consenttext',{bookingId:id})).text}catch(e){toast(e.message);return}
+  sheet(`<h2>Consentimiento</h2><div class="consent">${esc(text)}</div>
+  <label class="chk"><input type="checkbox" id="c-ok"> Leí y acepto el consentimiento.</label>
+  <label class="eb" for="c-sig" style="margin-top:6px">Escribe tu nombre completo como firma</label><input class="inp" id="c-sig" autocomplete="name" value="${esc(P.client.name)}">
+  <div id="c-err"></div><div class="acts"><button class="btn btn--ghost" data-act="close">Cerrar</button><button class="btn btn--copper" data-act="sign" data-id="${id}">Firmar</button></div>`);
+}
+document.addEventListener('click',async e=>{
+  if(e.target.id==='sheet'){closeSheet();return}
+  const b=e.target.closest('button');if(!b)return;
+  const a=b.dataset.act;
+  if(b.dataset.pday){pick.date=b.dataset.pday;pick.time=null;pick.err='';try{pick.slots=(await api('/slots',{bookingId:pick.mode==='move'?pick.id:undefined,serviceId:pick.serviceId,date:pick.date})).slots}catch(err){pick.slots=[]}drawPicker();return}
+  if(b.dataset.ptime){pick.time=b.dataset.ptime;drawPicker();return}
+  if(a==='close'){closeSheet();return}
+  if(a==='install'&&deferred){deferred.prompt();deferred=null;return}
+  if(a==='installx'){try{localStorage.setItem('mt-install-x','1')}catch(e){}render();return}
+  if(a==='move'){const x=P.upcoming.find(u=>u.id===b.dataset.id);openPicker('move',x.id,x.serviceId,'Cambiar '+x.serviceName);return}
+  if(a==='rebook'){openPicker('book',null,P.rebook.serviceId,P.rebook.serviceName);return}
+  if(a==='pickok'){b.disabled=true;try{P=await api(pick.mode==='move'?'/reschedule':'/book',pick.mode==='move'?{bookingId:pick.id,date:pick.date,start:pick.time}:{serviceId:pick.serviceId,date:pick.date,start:pick.time});closeSheet();render();toast(pick.mode==='move'?'Cita cambiada':'Cita reservada')}catch(err){pick.err=err.message;drawPicker()}return}
+  if(a==='cancel'){const x=P.upcoming.find(u=>u.id===b.dataset.id);if(!confirm('¿Cancelar tu '+x.serviceName+' del '+longDate(x.date)+'?'))return;try{P=await api('/cancel',{bookingId:x.id});render();toast('Cita cancelada')}catch(err){toast(err.message)}return}
+  if(a==='consent'){openConsent(b.dataset.id);return}
+  if(a==='sign'){try{P=await api('/consent',{bookingId:b.dataset.id,signature:$('#c-sig').value,agree:$('#c-ok').checked});closeSheet();render();toast('Consentimiento firmado')}catch(err){$('#c-err').innerHTML=`<div class="err">${esc(err.message)}</div>`}return}
+});
+load();
+</script>
+</body>
+</html>
