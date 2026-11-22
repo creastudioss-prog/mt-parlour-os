@@ -5,94 +5,97 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Reservar · MT Aesthetics · The Parlour</title>
 <meta name="description" content="Reserva tu cita con María Teresa en MT Aesthetics · The Parlour, New York. Una clienta a la vez.">
-<meta name="theme-color" content="#1F2D24">
+<meta name="theme-color" content="#F4EFE6">
 <link rel="icon" href="/pub/app-icon-192.png">
 <link rel="apple-touch-icon" href="/pub/app-icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=synonym@400,500,600&display=swap" rel="stylesheet">
 <style>
-:root{--cream:#F4EFE6;--oat:#EFE4D2;--euc:#1F2D24;--euc2:#15211A;--copper:#A87C5C;--carbon:#1A1A1A;--line:rgba(26,26,26,.16);--serif:'Fraunces','Times New Roman',serif;--sans:'Synonym',system-ui,sans-serif}
+:root{--cream:#F4EFE6;--oat:#EFE4D2;--paper:#FAF7F1;--euc:#1F2D24;--euc2:#15211A;--rosa:#D4A5A0;--carbon:#1A1A1A;--gris:#5A6359;--line:rgba(31,45,36,.14);--serif:'Fraunces','Times New Roman',serif;--sans:'Synonym',system-ui,sans-serif}
 *{box-sizing:border-box}html,body{margin:0}
-body{background:var(--cream);color:var(--carbon);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+body{background:var(--cream);color:var(--euc);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 button,input,textarea{font:inherit;color:inherit}
-.top{background:var(--euc);color:var(--cream);text-align:center;padding:28px 20px 30px}
-.top img{width:58px;height:auto;display:block;margin:0 auto 14px}
-.wm{font-family:var(--serif);font-variation-settings:"opsz" 144,"SOFT" 0;line-height:.88;font-size:30px}
-.wm b{display:block;font-weight:480;letter-spacing:-.025em}.wm span{display:block;font-weight:380;letter-spacing:.022em}
-.end{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--copper);margin-top:12px}
-main{max-width:640px;margin:0 auto;padding:28px 20px 120px}
-.steps{display:flex;gap:6px;justify-content:center;margin:0 0 24px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(26,26,26,.45)}
-.steps span[aria-current]{color:var(--euc);font-weight:600}
-h1{font-family:var(--serif);font-weight:380;font-variation-settings:"opsz" 72;font-size:34px;line-height:1.08;margin:0 0 6px;text-align:center}
-h1 em{color:var(--copper);font-style:italic}
-.lede{text-align:center;margin:0 0 26px;color:rgba(26,26,26,.7)}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin:0 -20px 14px;padding-left:20px;scrollbar-width:none}
+.top{padding:22px 20px 0;text-align:center}
+.top img{height:22px;width:auto;display:inline-block}
+.embed .top{display:none}
+main{max-width:600px;margin:0 auto;padding:30px 20px 130px}
+.embed main{padding-top:22px}
+.steps{display:flex;gap:18px;justify-content:center;margin:0 0 26px;font-size:12px;letter-spacing:.06em;color:rgba(31,45,36,.42)}
+.steps span[aria-current]{color:var(--euc)}
+.steps span[aria-current]::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--euc);margin-right:7px;vertical-align:2px}
+.steps .dot{display:none}
+h1{font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 100,"WONK" 0;font-size:clamp(30px,6vw,40px);line-height:1.08;letter-spacing:-.01em;margin:0 0 8px;text-align:center}
+h1 em{font-style:italic}
+.lede{text-align:center;margin:0 0 26px;color:var(--gris);font-size:15px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:0 -20px 18px;padding:2px 20px 8px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;border:1px solid var(--line);background:transparent;border-radius:999px;padding:9px 16px;font-size:14px;cursor:pointer;white-space:nowrap}
+.tab{flex:none;border:1px solid var(--line);background:transparent;border-radius:2px;padding:9px 15px;font-size:14px;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tab[aria-pressed=true]{background:var(--euc);color:var(--cream);border-color:var(--euc)}
-.list{display:grid;gap:10px}
-.svc{display:flex;justify-content:space-between;gap:12px;align-items:center;text-align:left;width:100%;background:#FBF8F3;border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer}
-.svc:hover,.svc[aria-pressed=true]{border-color:var(--euc)}
-.svc[aria-pressed=true]{box-shadow:inset 0 0 0 1px var(--euc)}
-.svc b{display:block;font-family:var(--serif);font-weight:440;font-size:19px;font-variation-settings:"opsz" 24}
-.svc small{color:rgba(26,26,26,.6);font-size:13px}
-.svc .pr{font-size:13px;color:var(--copper);white-space:nowrap}
-.days{display:flex;gap:8px;overflow-x:auto;margin:0 -20px 18px;padding:2px 20px 10px;scrollbar-width:none}
+.list{display:grid;border-top:1px solid var(--line)}
+.svc{display:flex;justify-content:space-between;gap:12px;align-items:center;text-align:left;width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);padding:18px 4px;cursor:pointer;transition:background .2s}
+.svc:hover{background:rgba(31,45,36,.03)}
+.svc[aria-pressed=true]{background:var(--paper)}
+.svc b{display:block;font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 100;font-size:21px;line-height:1.2}
+.svc small{color:var(--gris);font-size:13px}
+.svc .pr{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--gris);white-space:nowrap}
+.svc .pr::after{content:"";width:16px;height:16px;border-radius:50%;border:1px solid var(--line);flex:none}
+.svc[aria-pressed=true] .pr::after{border:5px solid var(--euc)}
+.days{display:flex;gap:6px;overflow-x:auto;margin:0 -20px 18px;padding:2px 20px 8px;scrollbar-width:none}
 .days::-webkit-scrollbar{display:none}
-.day{flex:none;width:64px;border:1px solid var(--line);background:#FBF8F3;border-radius:14px;padding:10px 0;text-align:center;cursor:pointer}
-.day span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,26,26,.55)}
-.day b{display:block;font-family:var(--serif);font-size:24px;font-weight:420;line-height:1.1}
-.day i{display:block;font-style:normal;font-size:10px;color:var(--copper);min-height:14px}
-.day[disabled]{opacity:.35;cursor:default}
-.day[aria-pressed=true]{background:var(--euc);color:var(--cream);border-color:var(--euc)}.day[aria-pressed=true] span,.day[aria-pressed=true] i{color:var(--cream)}
-.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
-.time{border:1px solid var(--line);background:#FBF8F3;border-radius:10px;padding:11px 0;cursor:pointer;font-size:15px}
+.day{flex:none;width:58px;border:1px solid var(--line);background:transparent;border-radius:2px;padding:10px 0;text-align:center;cursor:pointer}
+.day span{display:block;font-size:11px;letter-spacing:.08em;color:var(--gris)}
+.day b{display:block;font-family:var(--serif);font-size:23px;font-weight:300;line-height:1.15}
+.day i{display:block;font-style:normal;font-size:10px;color:var(--gris);min-height:14px}
+.day[disabled]{opacity:.3;cursor:default}
+.day[aria-pressed=true]{background:var(--euc);color:var(--cream);border-color:var(--euc)}.day[aria-pressed=true] span,.day[aria-pressed=true] i{color:rgba(244,239,230,.8)}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}
+.time{border:1px solid var(--line);background:transparent;border-radius:2px;padding:12px 0;cursor:pointer;font-size:15px}
 .time[aria-pressed=true]{background:var(--euc);color:var(--cream);border-color:var(--euc)}
-.lbl{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(26,26,26,.6);margin:22px 0 8px}
-.inp{width:100%;border:1px solid var(--line);background:#FBF8F3;border-radius:10px;padding:13px 14px;font-size:16px}
-.inp:focus{outline:2px solid var(--euc);outline-offset:1px}
-textarea.inp{min-height:84px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.row{grid-template-columns:1fr}}
-.checks{display:grid;gap:8px}
+.lbl{display:block;font-size:12px;letter-spacing:.06em;color:var(--gris);margin:24px 0 8px}
+.inp{width:100%;border:0;border-bottom:1px solid rgba(31,45,36,.3);background:transparent;border-radius:0;padding:10px 2px;font-size:17px}
+.inp:focus{outline:none;border-bottom-color:var(--euc)}
+textarea.inp{min-height:70px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:520px){.row{grid-template-columns:1fr}}
+.checks{display:grid;gap:10px}
 .chk{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer}
-.chk input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--euc);flex:none}
-.hint{font-size:13px;color:rgba(26,26,26,.6);margin:6px 0 0}
-.sum{background:var(--oat);border-radius:14px;padding:16px 18px;margin:0 0 6px}
-.sum b{font-family:var(--serif);font-weight:440;font-size:19px}
-.sum p{margin:2px 0 0;font-size:14px;color:rgba(26,26,26,.72)}
-.err{background:#F6E3DC;color:#7A2E1F;border-radius:10px;padding:12px 14px;margin:16px 0 0;font-size:14px}
-.warn{background:#F3EBD8;border-radius:10px;padding:12px 14px;margin:16px 0 0;font-size:14px}
-.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(244,239,230,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom))}
-.bar div{max-width:640px;margin:0 auto;display:flex;gap:10px}
-.btn{flex:1;border:0;border-radius:999px;padding:16px 20px;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;background:var(--euc);color:var(--cream);text-align:center;text-decoration:none;display:inline-block}
-.btn[disabled]{opacity:.35;cursor:default}
+.chk input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--euc);flex:none}
+.hint{font-size:13px;color:var(--gris);margin:8px 0 0}
+.sum{border:1px solid var(--line);padding:16px 18px;margin:0 0 8px;background:var(--paper)}
+.sum b{font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 100;font-size:21px}
+.sum p{margin:2px 0 0;font-size:14px;color:var(--gris)}
+.err{background:#F3E2DC;color:#7A2E1F;padding:12px 14px;margin:18px 0 0;font-size:14px}
+.warn{background:var(--oat);padding:12px 14px;margin:18px 0 0;font-size:14px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(244,239,230,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom))}
+.bar div{max-width:600px;margin:0 auto;display:flex;gap:8px}
+.btn{flex:1;border:0;border-radius:2px;padding:16px 20px;font-size:14px;letter-spacing:.04em;cursor:pointer;background:var(--euc);color:var(--cream);text-align:center;text-decoration:none;display:inline-block;transition:background .2s}
+.btn:hover{background:var(--euc2)}
+.btn[disabled]{opacity:.3;cursor:default}
 .btn--ghost{flex:0 0 auto;background:transparent;color:var(--euc);border:1px solid var(--line)}
-.btn--copper{background:var(--copper)}
+.btn--ghost:hover{background:rgba(31,45,36,.04)}
 .done{text-align:center}
-.done img{width:74px;margin:6px auto 18px;display:block}
-.done .card{background:#FBF8F3;border:1px solid var(--line);border-radius:16px;padding:20px;margin:18px 0;text-align:left}
-.done .card h2{font-family:var(--serif);font-weight:420;font-size:22px;margin:0 0 6px}
-.done .card p{margin:0 0 14px;font-size:15px;color:rgba(26,26,26,.75)}
-.done .stack{display:grid;gap:10px}
+.done img{width:46px;margin:4px auto 18px;display:block}
+.done .card{background:var(--paper);border:1px solid var(--line);padding:22px;margin:18px 0;text-align:left}
+.done .card h2{font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 100;font-size:23px;margin:0 0 6px}
+.done .card p{margin:0 0 16px;font-size:15px;color:var(--gris)}
+.done .stack{display:grid;gap:8px}
 .wa{color:var(--euc)}
-.foot{text-align:center;font-size:13px;color:rgba(26,26,26,.6);margin-top:36px}
-.foot a{color:var(--euc)}
+.foot{text-align:center;font-size:13px;color:var(--gris);margin-top:34px}
+.foot a{color:var(--euc);text-underline-offset:3px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.empty{text-align:center;color:rgba(26,26,26,.6);padding:18px 0}
+.empty{text-align:center;color:var(--gris);padding:18px 0}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
-<header class="top">
-  <img src="/pub/mt-sello-cobre.svg" alt="">
-  <div class="wm" aria-label="MT Aesthetics"><b>MT</b><span>AESTHETICS</span></div>
-  <div class="end">The Parlour · New York</div>
-</header>
+<header class="top"><img src="/pub/nombre-verde.svg" alt="mt aesthetics"></header>
 <main id="app" aria-live="polite"></main>
 <nav class="bar" id="bar" hidden><div id="barin"></div></nav>
 <script>
 const $=s=>document.querySelector(s);
+const Q=new URLSearchParams(location.search);if(Q.get('embed')==='1')document.documentElement.classList.add('embed');
+const NAME=c=>c.replace('Wax','Cera');
+const CATQ={faciales:'Faciales',masajes:'Masajes',cera:'Wax · Mujeres',hifu:'HIFU'};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const DOW=['dom','lun','mar','mié','jue','vie','sáb'],MONL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const pd=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
@@ -105,21 +108,21 @@ const api=async(u,o)=>{const r=await fetch(u,o);const j=await r.json().catch(()=
 async function init(){
   try{CAT=await api('/api/public/catalog')}catch(e){$('#app').innerHTML='<p class="empty">No pudimos cargar los servicios. Escríbenos por <a class="wa" href="https://wa.me/13474795229">WhatsApp</a>.</p>';return}
   S.cat=CAT.cats[0];
-  const q=new URLSearchParams(location.search).get('servicio');if(q&&CAT.services.find(s=>s.id===q)){S.svc=CAT.services.find(s=>s.id===q);S.cat=S.svc.cat}
+  const q=Q.get('servicio');if(q&&CAT.services.find(s=>s.id===q)){S.svc=CAT.services.find(s=>s.id===q);S.cat=S.svc.cat}else if(q&&CATQ[q]&&CAT.cats.includes(CATQ[q])){S.cat=CATQ[q]}
   render();
 }
 function bar(html){const b=$('#bar');if(!html){b.hidden=true;return}b.hidden=false;$('#barin').innerHTML=html}
-function steps(){const n=['Servicio','Día y hora','Tus datos'];return `<div class="steps">${n.map((x,i)=>`<span ${S.step===i+1?'aria-current="step"':''}>${i+1} ${x}</span>`).join('<span>·</span>')}</div>`}
+function steps(){const n=['Servicio','Día y hora','Tus datos'];return `<div class="steps">${n.map((x,i)=>`<span ${S.step===i+1?'aria-current="step"':''}>${x}</span>`).join('')}</div>`}
 function render(){
   const a=$('#app');
   if(S.step===1){
     const cats=[...CAT.cats,'Consulta'];
     const list=CAT.services.filter(s=>s.cat===S.cat);
-    a.innerHTML=steps()+`<h1>Escoge tu <em>ritual</em></h1><p class="lede">Una clienta a la vez. Cada servicio se confirma en tu consulta de piel.</p>
-    <div class="tabs" role="group" aria-label="Categorías">${cats.map(c=>`<button class="tab" data-cat="${esc(c)}" aria-pressed="${c===S.cat}">${esc(c==='Consulta'?'Consulta de piel':c)}</button>`).join('')}</div>
+    a.innerHTML=steps()+`<h1>¿Qué te gustaría?</h1><p class="lede">Una clienta a la vez. Todo se confirma en tu consulta de piel.</p>
+    <div class="tabs" role="group" aria-label="Categorías">${cats.map(c=>`<button class="tab" data-cat="${esc(c)}" aria-pressed="${c===S.cat}">${esc(c==='Consulta'?'Consulta de piel':NAME(c))}</button>`).join('')}</div>
     <div class="list">${list.map(s=>`<button class="svc" data-svc="${s.id}" aria-pressed="${S.svc&&S.svc.id===s.id}"><span><b>${esc(s.name)}</b><small>${s.dur} min</small></span><span class="pr">${s.priceFrom?'desde $'+s.priceFrom:'sin costo'}</span></button>`).join('')}</div>
     <p class="foot">¿Primera vez o tienes dudas? Escríbele a María por <a href="https://wa.me/13474795229?text=${encodeURIComponent('Hola María Teresa, quiero información para reservar.')}">WhatsApp</a>.</p>`;
-    bar(`<button class="btn" id="next" ${S.svc?'':'disabled'}>Continuar</button>`);
+    bar(`<button class="btn" id="next" ${S.svc?'':'disabled'}>${S.svc?'Continuar · '+esc(S.svc.name):'Elige un servicio'}</button>`);
   }
   if(S.step===2){
     const t0=pd(CAT.today);const ds=[];for(let i=0;i<=CAT.policy.daysAhead;i++){const d=new Date(t0);d.setDate(t0.getDate()+i);ds.push(d)}
@@ -151,7 +154,7 @@ function render(){
   }
   if(S.step===4){
     const r=S.res,abs=location.origin+r.portal;
-    a.innerHTML=`<div class="done"><img src="/pub/mt-sello-cobre.svg" alt=""><h1>Tu cita está <em>reservada</em></h1>
+    a.innerHTML=`<div class="done"><img src="/pub/silueta-verde.svg" alt=""><h1>Tu cita está <em>reservada.</em></h1>
     <div class="sum" style="text-align:left"><b>${esc(S.svc.name)}</b><p>${longDate(S.date)} · ${h12(S.time)} · ${S.svc.dur} min</p></div>
     ${r.warn&&r.warn.length?`<div class="warn">María lo revisará contigo antes de empezar: ${esc(r.warn[0])}.</div>`:''}
     <div class="card"><h2>Tu app del parlour</h2><p>Ahí ves tu cita, la cambias si lo necesitas${r.needsConsent?', firmas tu consentimiento antes de llegar':''} y recibes los cuidados para después. Guárdala en tu pantalla de inicio.</p>
@@ -160,6 +163,7 @@ function render(){
     <a class="btn btn--ghost" style="flex:auto" href="https://wa.me/13474795229?text=${encodeURIComponent('Hola María Teresa, acabo de reservar '+S.svc.name+' para el '+longDate(S.date)+' a las '+h12(S.time)+'.')}">Avisar a María por WhatsApp</a></div>
     <p class="foot">Te enviamos la dirección exacta al confirmar.</p></div>`;
     bar('');
+    if(Q.get('embed')==='1')a.querySelectorAll('a[href^="/c/"],a[href^="https://wa.me"]').forEach(x=>x.target='_top');
     $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(abs);$('#copy').textContent='Enlace copiado'}catch{prompt('Copia tu enlace:',abs)}};
   }
 }
@@ -183,7 +187,7 @@ document.addEventListener('click',async e=>{
     S.busy=true;render();
     try{S.res=await api('/api/public/book',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceId:S.svc.id,date:S.date,start:S.time,name:f.name,phone:f.phone,email:f.email,note:f.note,flags:f.flags,agree:f.agree,website:$('#f-web').value})});
       try{localStorage.setItem('mt-portal',S.res.portal)}catch(e){}
-      if(S.res.payUrl){location.href=S.res.payUrl;return}
+      if(S.res.payUrl){try{(Q.get('embed')==='1'?window.top:window).location.href=S.res.payUrl}catch(e){location.href=S.res.payUrl}return}
       S.step=4}
     catch(err){S.err=err.message;if(/ocupar|libre/.test(err.message)){await loadSlots()}}
     S.busy=false;render();scrollTo(0,0);return}

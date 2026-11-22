@@ -5,28 +5,29 @@
 </head><body><title>MT Parlour Reservas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=synonym@400,500,600&display=swap">
 <style>
 /* Layout: barra de marca con selector "Parlour OS / Página de reservas". Parlour OS = navegación lateral (escritorio) o inferior (móvil) + módulos; página de reservas = columna estrecha tipo móvil. */
 :root{
   --cream:#F4EFE6; --oat:#EFE4D2; --paper:#FBF8F3;
-  --euca:#1F2D24; --euca-2:#15211A; --copper:#A87C5C; --copper-ink:#8A6143;
+  --euca:#1F2D24; --euca-2:#15211A; --copper:#1F2D24; --copper-ink:#5A6359; --rosa:#D4A5A0;
   --ink:#1A1A1A; --muted:#5E625B; --line:rgba(26,26,26,.14); --line-2:rgba(26,26,26,.3);
   --ok:#3F6B4E; --ok-bg:#E3ECE3; --warn:#9A6A1E; --warn-bg:#F5E8CF; --bad:#9B3B2E; --bad-bg:#F3DCD6; --info-bg:#E7E1D6;
   --on-euca:#F4EFE6; --ig:#B5487A; --fb:#3B5DA8;
   --display:'Fraunces','Times New Roman',serif;
-  --sans:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Synonym',system-ui,-apple-system,'Segoe UI',sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --cream:#141C17; --oat:#1D2821; --paper:#1F2A23;
-  --euca:#D9CDB8; --euca-2:#EDE4D3; --copper:#C99D7B; --copper-ink:#D6AE8E;
+  --euca:#D9CDB8; --euca-2:#EDE4D3; --copper:#D4A5A0; --copper-ink:#D4A5A0; --rosa:#D4A5A0;
   --ink:#EDE7DC; --muted:#A9AEA3; --line:rgba(237,231,220,.13); --line-2:rgba(237,231,220,.3);
   --ok:#9CC7A8; --ok-bg:#22362A; --warn:#E3B76A; --warn-bg:#3A2F1C; --bad:#E79A8B; --bad-bg:#3D231F; --info-bg:#2A332C;
   --on-euca:#141C17; --ig:#E78AB3; --fb:#8FA9E3; color-scheme:dark}}
 :root[data-theme="dark"]{
   --cream:#141C17; --oat:#1D2821; --paper:#1F2A23;
-  --euca:#D9CDB8; --euca-2:#EDE4D3; --copper:#C99D7B; --copper-ink:#D6AE8E;
+  --euca:#D9CDB8; --euca-2:#EDE4D3; --copper:#D4A5A0; --copper-ink:#D4A5A0; --rosa:#D4A5A0;
   --ink:#EDE7DC; --muted:#A9AEA3; --line:rgba(237,231,220,.13); --line-2:rgba(237,231,220,.3);
   --ok:#9CC7A8; --ok-bg:#22362A; --warn:#E3B76A; --warn-bg:#3A2F1C; --bad:#E79A8B; --bad-bg:#3D231F; --info-bg:#2A332C;
   --on-euca:#141C17; --ig:#E78AB3; --fb:#8FA9E3; color-scheme:dark}
@@ -51,9 +52,9 @@ p{margin:0}
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--cream) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar__in{padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
 .brand{display:flex;align-items:baseline;gap:.45em;font-family:var(--display);font-size:18px;line-height:1}
-.brand b{font-weight:500;letter-spacing:-.02em}
+.brand b{font-weight:300;letter-spacing:-.01em;font-variation-settings:"SOFT" 100,"WONK" 0;font-size:1.15em}
 .brand span{font-weight:380;letter-spacing:.06em;font-size:.86em}
-.brand small{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--copper-ink);margin-left:.5em;border:1px solid var(--copper);border-radius:4px;padding:2px 5px}
+.brand small{font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--muted);margin-left:.5em}
 .seg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;padding:3px;gap:2px;background:var(--paper)}
 .seg button{border:0;background:transparent;padding:6px 13px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--euca);color:var(--on-euca)}
@@ -99,7 +100,7 @@ textarea.inp{resize:vertical;min-height:72px}
 .nav button{display:flex;align-items:center;justify-content:space-between;gap:8px;border:0;background:transparent;text-align:left;padding:9px 12px;border-radius:9px;font-size:14px;color:var(--muted);font-weight:500}
 .nav button:hover{color:var(--ink);background:var(--paper)}
 .nav button[aria-current="page"]{background:var(--euca);color:var(--on-euca)}
-.nav .badge{font-size:11px;font-weight:600;min-width:20px;text-align:center;border-radius:999px;padding:0 6px;background:var(--copper);color:#fff}
+.nav .badge{font-size:11px;font-weight:600;min-width:20px;text-align:center;border-radius:999px;padding:0 6px;background:var(--nav-fg);color:var(--nav-bg)}
 .nav__sep{height:1px;background:var(--line);margin:10px 8px}
 .nav__foot{margin-top:auto;padding:10px 12px;font-size:12px;color:var(--muted)}
 .main{padding-inline:clamp(16px,3vw,32px);padding-block:22px 90px;display:grid;gap:20px;align-content:start;min-width:0}
@@ -339,9 +340,11 @@ table.t{width:100%;border-collapse:collapse;font-size:13px}
 
 /* ===== v5: colores de marca, navegación, calendario ===== */
 :root{--nav-bg:#1F2D24;--nav-fg:#F4EFE6;--nav-mut:rgba(244,239,230,.62);--nav-hi:rgba(244,239,230,.10);
-  --cta:#8F6446;--cta-2:#7A543A;--on-cta:#FFFFFF;--cta-soft:#F1E3D6;--hero:#1F2D24;--on-hero:#F4EFE6;--hero-mut:rgba(244,239,230,.72);
-  --c-fac:#A87C5C;--c-mas:#3F6B4E;--c-wax:#B0627A;--c-hifu:#6B5A86;--c-con:#7D7A5C;--c-blk:#9A9A92;
-  --cal-free:#F1E3D6;--cal-free-ink:#7A543A}
+  --cta:#1F2D24;--cta-2:#15211A;--on-cta:#F4EFE6;--cta-soft:#EFE4D2;--hero:#1F2D24;--on-hero:#F4EFE6;--hero-mut:rgba(244,239,230,.72);
+  --c-fac:#C48F88;--c-mas:#3F6B4E;--c-wax:#B0627A;--c-hifu:#6B5A86;--c-con:#7D7A5C;--c-blk:#9A9A92;
+  --cal-free:#EFE4D2;--cal-free-ink:#1F2D24}
+.hero,.nav{--cta:#F4EFE6;--cta-2:#FFFFFF;--on-cta:#1F2D24}
+.hero em,.hero i{color:inherit}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--nav-bg:#0E1511;--nav-fg:#EDE7DC;--nav-mut:rgba(237,231,220,.6);--nav-hi:rgba(237,231,220,.08);
   --cta:#C99D7B;--cta-2:#D9B08F;--on-cta:#141C17;--cta-soft:#3A2D23;--hero:#0E1511;--on-hero:#EDE7DC;--hero-mut:rgba(237,231,220,.7);
   --c-fac:#D3A47F;--c-mas:#86BC97;--c-wax:#E59AB0;--c-hifu:#B6A3D6;--c-con:#C4C09A;--c-blk:#6F716B;--cal-free:#3A2D23;--cal-free-ink:#E2BC9C}}
@@ -489,7 +492,7 @@ details.more-d summary::-webkit-details-marker{display:none}
 .ev>*{max-width:100%}
 
 /* ===== v6: lenguaje editorial de la marca ===== */
-:root{--r:6px}
+:root{--r:3px}
 .panel,.kpis,.wk,.bk,.dlg__p,.pcard,.next,.hero,.empty,.note,.warnbox,.badbox,.okbox,.consent,.linkbox,.summary,.picked,.inp,.sig canvas{border-radius:var(--r)}
 .hero{border-radius:4px}
 .bk{box-shadow:none}
@@ -528,11 +531,16 @@ em.rn{font-family:var(--display);font-style:italic;text-transform:none;letter-sp
 .tabbar .plus__c svg{width:24px;height:24px}
 .plus__p button{padding:14px 12px;border-bottom:1px solid var(--line);border-radius:0}
 .plus__p button b{font-family:var(--display);font-weight:400;font-size:19px}
+
+/* marca nueva 2026: botones rectos, sin cobre ni números romanos */
+.btn,.btn--sm,.seg,.seg button,.nav button,.qa,.tslot button,.tslot .go{border-radius:3px!important}
+.hero h1 em,.hero em.rn{color:inherit!important}
+.hero em.rn{display:none}
 </style>
 
 <header class="bar">
   <div class="bar__in">
-    <div class="brand"><b>MT</b><span>AESTHETICS</span><small>Parlour OS</small></div>
+    <div class="brand"><b>mt aesthetics</b><small>Parlour OS</small></div>
     <div class="seg" role="group" aria-label="Modo">
       <button id="m-os" aria-pressed="true">Parlour OS</button>
       <button id="m-web" aria-pressed="false">Página de reservas</button>
@@ -1999,7 +2007,7 @@ function openPin(){const has=!!lsGet('mt-pin','');
       if(has){if(h!==lsGet('mt-pin','')){toast('PIN incorrecto.');return false}lsSet('mt-pin','');toast('PIN quitado')}else{lsSet('mt-pin',h);toast('PIN activado en este dispositivo')}render()});
 }
 function showLock(){const h=lsGet('mt-pin','');if(!h)return;const L=$('lock');
-  L.innerHTML=`<form class="lock__p" id="lockf"><div class="brand" style="font-size:26px"><b>MT</b><span>AESTHETICS</span></div><p class="muted">Escribe tu PIN</p><input class="inp" id="lock-v" type="password" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="PIN"><p class="err" id="lock-e" hidden>PIN incorrecto</p><button class="btn btn--pri btn--block" type="submit">Entrar</button></form>`;
+  L.innerHTML=`<form class="lock__p" id="lockf"><div class="brand" style="font-size:30px;justify-content:center"><b>mt aesthetics</b></div><p class="muted">Escribe tu PIN</p><input class="inp" id="lock-v" type="password" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="PIN"><p class="err" id="lock-e" hidden>PIN incorrecto</p><button class="btn btn--pri btn--block" type="submit">Entrar</button></form>`;
   L.hidden=false;$('lock-v').focus();
   $('lockf').onsubmit=async e=>{e.preventDefault();if(await hashPin($('lock-v').value.trim())===h){L.hidden=true;L.innerHTML=''}else{$('lock-e').hidden=false;$('lock-v').value=''}};
 }
