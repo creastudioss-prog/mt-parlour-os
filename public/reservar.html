@@ -107,6 +107,7 @@ const api=async(u,o)=>{const r=await fetch(u,o);const j=await r.json().catch(()=
 
 async function init(){
   try{CAT=await api('/api/public/catalog')}catch(e){$('#app').innerHTML='<p class="empty">No pudimos cargar los servicios. Escríbenos por <a class="wa" href="https://wa.me/13474795229">WhatsApp</a>.</p>';return}
+  if(CAT.open===false){$('#app').innerHTML='<h1>Volvemos pronto.</h1><p class="lede">Las reservas en línea están en pausa por ahora. Escríbele a María y te agenda.</p><p style="text-align:center"><a class="btn" style="display:inline-block;max-width:320px" href="https://wa.me/13474795229" target="_top">Escribir por WhatsApp</a></p>';return}
   S.cat=CAT.cats[0];
   const q=Q.get('servicio');if(q&&CAT.services.find(s=>s.id===q)){S.svc=CAT.services.find(s=>s.id===q);S.cat=S.svc.cat}else if(q&&CATQ[q]&&CAT.cats.includes(CATQ[q])){S.cat=CATQ[q]}
   render();

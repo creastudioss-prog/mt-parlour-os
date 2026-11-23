@@ -536,15 +536,125 @@ em.rn{font-family:var(--display);font-style:italic;text-transform:none;letter-sp
 .btn,.btn--sm,.seg,.seg button,.nav button,.qa,.tslot button,.tslot .go{border-radius:3px!important}
 .hero h1 em,.hero em.rn{color:inherit!important}
 .hero em.rn{display:none}
+
+/* ===== diseño 2026: simple, marca MT ===== */
+:root{--rosa:#D4A5A0;--avena-2:#E6D6BE}
+body{background:var(--cream)}
+.bar__new{margin-left:auto}
+@media (min-width:861px){.bar{display:none}.os{min-height:100vh}.nav{top:0;height:100vh}}
+.nav{width:auto;padding:26px 16px}
+.nav__logo{height:20px;width:auto;margin:0 10px 30px;align-self:flex-start}
+.nav__grp{font-size:12px;letter-spacing:.04em;text-transform:none;color:var(--nav-mut);padding:22px 12px 6px;border-top:1px solid rgba(244,239,230,.12);margin-top:14px}
+.nav button{font-size:15px;padding:11px 12px;border-radius:3px}
+.nav__grp~button{font-size:13px;padding:7px 12px}
+.nav__grp~button svg{width:15px;height:15px}
+.nav button[aria-current="page"]{background:var(--cream)!important;color:var(--euca)!important}
+.nav .badge{background:rgba(244,239,230,.14)!important;color:var(--nav-fg)!important}
+.nav button[aria-current="page"] .badge{background:var(--euca)!important;color:var(--cream)!important}
+.main{padding:clamp(28px,2.4vw,44px) clamp(20px,3vw,48px) 40px}
+.h-date{font-size:13px;color:var(--muted);margin:0 0 6px}
+.h-title{font-family:var(--display);font-weight:300;font-variation-settings:"SOFT" 100,"WONK" 0;font-size:clamp(30px,3.2vw,42px);line-height:1.08;letter-spacing:-.01em;margin:0 0 22px}
+.h-title em{font-style:italic}
+.h-lbl{font-size:13px;color:var(--muted);margin:0 0 12px}
+.h-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(16px,1.3vw,24px);align-items:stretch}
+.h-col{display:flex;flex-direction:column;gap:clamp(16px,1.3vw,24px);min-width:0}
+.h-next{background:var(--euca);color:var(--cream);border-radius:4px;padding:28px}
+.h-next .h-lbl{color:rgba(244,239,230,.65)}
+.h-next h2{font-family:var(--display);font-weight:300;font-variation-settings:"SOFT" 100;font-size:34px;line-height:1.1;margin:0 0 4px}
+.h-next p{margin:0;color:rgba(244,239,230,.82)}
+.h-next__meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 4px;font-size:14px}
+.h-alert{display:inline-block;background:rgba(244,239,230,.1);padding:6px 12px;border-radius:3px;font-size:13px;margin-top:12px!important}
+.h-next__btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.btn--light{background:var(--cream)!important;color:var(--euca)!important;border-color:var(--cream)!important}
+.btn--line{background:transparent!important;color:var(--cream)!important;border:1px solid rgba(244,239,230,.35)!important}
+.h-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.h-quick button{background:var(--oat);border:0;border-radius:4px;padding:18px 16px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;transition:transform .2s;color:var(--euca)}
+.h-quick button:hover{transform:translateY(-2px)}
+.h-quick svg{width:20px;height:20px;stroke:var(--euca);fill:none;stroke-width:1.4}
+.h-quick b{font-family:var(--display);font-weight:300;font-variation-settings:"SOFT" 100;font-size:20px;margin-top:10px}
+.h-quick span{font-size:13px;color:var(--muted)}
+.h-stats{background:var(--oat);border:0;border-radius:4px;padding:20px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:left;color:var(--euca)}
+.h-stats .h-lbl{grid-column:1/-1;margin:0}
+.h-stats b{display:block;font-family:var(--display);font-weight:300;font-variation-settings:"SOFT" 100;font-size:34px;line-height:1.1}
+.h-stats span{font-size:13px;color:var(--muted)}
+.h-day,.h-todo{background:var(--oat);border-radius:4px;padding:22px}
+.h-day__h{display:flex;justify-content:space-between;align-items:baseline}
+.h-link{border:0;background:none;font-size:13px;text-decoration:underline;text-underline-offset:3px;color:var(--euca)}
+.h-tl{display:grid;gap:6px}
+.h-tl__i{display:grid;grid-template-columns:70px minmax(0,1fr);gap:12px}
+.h-tl__t{font-size:13px;color:var(--muted);padding-top:12px}
+.h-appt{border:0;border-radius:3px;padding:12px 14px;text-align:left;width:100%;display:grid;gap:1px;transition:transform .15s}
+.h-appt:hover{transform:translateX(3px)}
+.h-appt b{font-weight:500;font-size:15px}
+.h-appt span{font-size:13px;opacity:.75}
+.h-free{border:1px dashed rgba(31,45,36,.3);background:none;border-radius:3px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);width:100%}
+.h-free:hover{border-color:var(--euca);color:var(--euca)}
+.h-todo__i{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.h-todo__i:last-child{border:0}
+.h-todo__i i{width:7px;height:7px;border-radius:50%;background:var(--euca);flex:none}
+.h-todo__i i.bad{background:#9B3B2E}
+.h-todo__i span{flex:1;min-width:0}
+.h-todo__i button{border:0;background:none;font-size:13px;text-decoration:underline;text-underline-offset:3px;color:var(--euca);white-space:nowrap}
+.h-more summary{font-size:13px;color:var(--muted);padding-top:10px;cursor:pointer}
+.h-empty{font-size:14px;color:var(--muted);margin:0}
+/* colores por servicio (citas en Hoy y en la Agenda) */
+[data-c=fac]{background:var(--rosa)!important;color:#1A1A1A!important;box-shadow:none!important}
+[data-c=mas]{background:var(--avena-2)!important;color:var(--euca)!important;box-shadow:none!important}
+[data-c=wax]{background:var(--cream)!important;color:var(--euca)!important;box-shadow:inset 0 0 0 1px rgba(31,45,36,.35)!important}
+[data-c=hifu]{background:#1F2D24!important;color:#F4EFE6!important;box-shadow:none!important}
+[data-c=con]{background:transparent!important;color:var(--euca)!important;box-shadow:inset 0 0 0 1px rgba(31,45,36,.35)!important}
+.ev{border-radius:3px!important}
+/* reservas */
+.r-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start}
+.r-sw{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.r-sw p{font-size:13px;color:var(--muted);margin:2px 0 0}
+.tog{width:48px;height:28px;border-radius:14px;background:rgba(31,45,36,.2);position:relative;flex:none;border:0;transition:background .25s;cursor:pointer}
+.tog::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .25s}
+.tog[aria-checked=true]{background:var(--euca)}.tog[aria-checked=true]::after{transform:translateX(20px)}
+.r-link{display:flex;gap:8px}
+a.btn{text-decoration:none!important;color:var(--euca)}
+.r-link input{flex:1;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:3px;padding:12px;font:inherit;font-size:14px;color:var(--euca)}
+.r-list{display:grid}
+.r-row{display:flex;justify-content:space-between;gap:12px;border:0;border-bottom:1px solid var(--line);background:none;padding:12px 0;text-align:left;font-size:14px;color:var(--euca)}
+.r-row span{color:var(--muted)}
+.r-phone{background:#15211A;border-radius:30px;padding:10px}
+.r-phone iframe{display:block;width:100%;height:600px;border:0;border-radius:22px;background:var(--cream)}
+/* escala por pantalla en computadoras */
+@media (min-width:1100px){
+  .os{height:calc(100vh / var(--k,1));min-height:0}
+  .nav{height:100%}
+  .main{overflow:auto;max-height:100%}
+  .main:has(.h-grid){display:flex;flex-direction:column}
+  .main .h{display:flex;flex-direction:column;flex:1;min-height:0}
+  .h-grid{flex:1;min-height:0}
+  .h-next{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .h-next .h-alert{align-self:flex-start}
+  .h-day{flex:1;display:flex;flex-direction:column}
+  .h-tl{flex:1;align-content:space-evenly}
+}
+/* iPad */
+@media (min-width:861px) and (max-width:1099px){
+  .os{grid-template-columns:76px minmax(0,1fr)}
+  .nav{padding:22px 10px}
+  .nav__logo,.nav__foot,.nav .badge,.nav__grp,.nav .l{display:none!important}
+  .nav button{justify-content:center;padding:13px 0}
+  .h-grid{grid-template-columns:1fr}
+  .h-grid>.h-col:nth-child(2){display:grid;grid-template-columns:1.1fr 1fr;align-items:start}
+  .r-grid{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .h-grid,.r-grid{grid-template-columns:1fr}
+  .h-quick b{font-size:16px}
+  .h-next h2{font-size:28px}
+  .r-phone{max-width:320px;margin:0 auto}
+}
 </style>
 
 <header class="bar">
   <div class="bar__in">
-    <div class="brand"><b>mt aesthetics</b><small>Parlour OS</small></div>
-    <div class="seg" role="group" aria-label="Modo">
-      <button id="m-os" aria-pressed="true">Parlour OS</button>
-      <button id="m-web" aria-pressed="false">Página de reservas</button>
-    </div>
+    <div class="brand"><b>mt aesthetics</b></div>
+    <button class="btn btn--sm btn--ghost bar__new" data-x="manual">+ Nueva cita</button>
+    <span hidden><button id="m-os"></button><button id="m-web"></button></span>
   </div>
 </header>
 
@@ -966,14 +1076,15 @@ const ICON={
   agenda:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   clientas:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
   asistente:'<path d="M14 9a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v0a5 5 0 0 0 3 4.6V17l3.2-3H9a5 5 0 0 0 5-5z"/><path d="M14 9.5h1a5 5 0 0 1 5 5v0a5 5 0 0 1-3 4.6V22l-3.2-3H14a5 5 0 0 1-4-2"/><path d="M6.5 9h.01M9 9h.01M11.5 9h.01"/>',
+  reservas:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
   mas:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
 };
-const NAVI={inicio:ICON.inicio,agenda:ICON.agenda,clientas:ICON.clientas,asistente:ICON.asistente,
+const NAVI={reservas:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',cobrar:'<rect x="3" y="6" width="18" height="12" rx="1"/><path d="M3 10h18"/>',inicio:ICON.inicio,agenda:ICON.agenda,clientas:ICON.clientas,asistente:ICON.asistente,
   seguimiento:'<path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',ventas:'<path d="M4 8h16l-1.5 11h-13z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>',
   redes:'<path d="M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z"/>',contenido:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 4"/>',
   inventario:'<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>',finanzas:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   ajustes:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>'};
-const MODS=[['inicio','Inicio'],['agenda','Agenda'],['clientas','Clientas'],['seguimiento','Seguimiento y ofertas'],['ventas','Ventas'],['redes','Redes y reseñas'],['contenido','Contenido'],['inventario','Inventario'],['finanzas','Finanzas'],['asistente','Asistente'],['ajustes','Ajustes']];
+const MODS=[['inicio','Hoy'],['reservas','Reservas'],['agenda','Agenda'],['clientas','Clientas'],['seguimiento','Seguimiento y ofertas'],['ventas','Ventas'],['redes','Redes y reseñas'],['contenido','Contenido'],['inventario','Inventario'],['finanzas','Finanzas'],['asistente','Asistente'],['ajustes','Ajustes']];
 const OWNER_ONLY=new Set(['finanzas']);
 const isOwnerView=()=>OS.role!=='Asistente';
 const visibleMods=()=>MODS.filter(([k])=>isOwnerView()||!OWNER_ONLY.has(k));
@@ -984,18 +1095,19 @@ function badges(){const t=today();
     inventario:D.products.filter(p=>!p.retail&&(p.stock||0)<=(p.min||0)||p.retail&&(p.stock||0)<=(p.min||0)).length,
     ventas:D.waitlist.filter(w=>w.status==='esperando').length}}
 function renderNav(){const bd=badges();
-  const groups=[['Día a día',['inicio','agenda','clientas','asistente']],['Hacer crecer',['seguimiento','ventas','redes','contenido']],['Negocio',['inventario','finanzas','ajustes']]];
-  const vis=new Set(visibleMods().map(([k])=>k)),lab=Object.fromEntries(MODS);
-  $('nav').innerHTML=groups.map(([g,ks])=>`<div class="nav__grp">${g}</div>`+ks.filter(k=>vis.has(k)).map(k=>`<button data-mod="${k}" ${OS.mod===k?'aria-current="page"':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${NAVI[k]||''}</svg><span class="l">${lab[k]}</span>${bd[k]?`<span class="badge">${bd[k]}</span>`:''}</button>`).join('')).join('')+
+  const groups=[['',['inicio','agenda','clientas','cobrar','reservas']],['Más',['seguimiento','ventas','redes','contenido','inventario','finanzas','asistente','ajustes']]];
+  const vis=new Set([...visibleMods().map(([k])=>k),'cobrar']),lab={...Object.fromEntries(MODS),cobrar:'Cobrar'};
+  $('nav').innerHTML=`<img class="nav__logo" src="/pub/nombre-crema.svg" alt="mt aesthetics">`+groups.map(([g,ks])=>(g?`<div class="nav__grp">${g}</div>`:'')+ks.filter(k=>vis.has(k)).map(k=>`<button data-mod="${k}" ${OS.mod===k?'aria-current="page"':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${NAVI[k]||''}</svg><span class="l">${lab[k]}</span>${bd[k]?`<span class="badge">${bd[k]}</span>`:''}</button>`).join('')).join('')+
     `<div class="nav__foot">${OS.offline?'Modo local: los cambios no se guardan.':'Sincronizado en vivo'} · <b>${esc(OS.role)}</b><br>Simulación · datos de ejemplo</div>`;
-  const tb=[['inicio','Inicio'],['agenda','Agenda'],['plus','Nuevo'],['asistente','Asistente'],['mas','Más']];
-  const moreKeys=['clientas','seguimiento','ventas','redes','contenido','inventario','finanzas','ajustes'];
+  const tb=[['inicio','Hoy'],['agenda','Agenda'],['plus','Nuevo'],['reservas','Reservas'],['mas','Más']];
+  const moreKeys=['clientas','seguimiento','ventas','redes','contenido','inventario','finanzas','asistente','ajustes'];
   const moreBadge=moreKeys.reduce((a,k)=>a+(bd[k]||0),0);
   $('tabbar').innerHTML=tb.map(([k,l])=>{const cur=k==='mas'?moreKeys.includes(OS.mod):OS.mod===k;const dot=(k==='mas'&&moreBadge)||(k==='agenda'&&bd.agenda);
     if(k==='plus')return `<button class="plus" data-mod="plus" aria-label="Nueva acción"><span class="plus__c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>${l}</button>`;
     return `<button data-mod="${k}" ${cur?'aria-current="page"':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${ICON[k]}</svg>${l}${dot?'<span class="dot"></span>':''}</button>`}).join('');
 }
-function go(mod){if(mod==='mas'){openMore();return}if(mod==='plus'){openPlus();return}if(!visibleMods().some(([k])=>k===mod))mod='inicio';OS.mod=mod;$('more').hidden=true;render();scrollTo({top:0})}
+function go(mod){if(mod==='mas'){openMore();return}if(mod==='plus'){openPlus();return}if(mod==='cobrar'){openPlus();const c=$('more').querySelector('[data-px=cobrar]');if(c)c.click();return}if(!visibleMods().some(([k])=>k===mod))mod='inicio';OS.mod=mod;$('more').hidden=true;render();scrollTo({top:0})}
+document.querySelector('.bar__new').addEventListener('click',()=>openManual());
 $('nav').addEventListener('click',e=>{const b=e.target.closest('[data-mod]');if(b)go(b.dataset.mod)});
 $('tabbar').addEventListener('click',e=>{const b=e.target.closest('[data-mod]');if(b)go(b.dataset.mod)});
 function openPlus(){const m=$('more');const A=[['manual','Nueva cita','Agendar a una clienta'],['cobrar','Cobrar','Terminar una cita de hoy'],['sell','Vender','Productos, paquetes o tarjetas'],['block','Bloquear hora','Almuerzo, diligencia, día libre']];
@@ -1005,7 +1117,7 @@ function openPlus(){const m=$('more');const A=[['manual','Nueva cita','Agendar a
     if(x==='cobrar'){const t=today();const L=D.bookings.filter(b=>b.date===t&&['confirmed','done'].includes(b.status));if(!L.length){toast('No hay citas por cobrar hoy.');return}if(L.length===1){L[0].status==='done'?doAct('clientpays',L[0].id):doAct('finish',L[0].id);return}
       dialog(`<div class="dlg__h"><h2>¿A quién cobras?</h2><button type="button" data-close aria-label="Cerrar">×</button></div><div class="rows">${L.map(b=>`<button type="button" class="rowbtn" data-act="${b.status==='done'?'clientpays':'finish'}" data-id="${b.id}"><b>${hm12(toMin(b.start))} · ${esc(b.client?.name)}</b><span class="muted small">${esc(b.serviceName)}${b.status==='done'?' · debe '+money(b.finalAmount):''}</span></button>`).join('')}</div>`,async()=>{})}}}
 function openMore(){const bd=badges();const m=$('more');
-  m.innerHTML=`<div class="more__p">${visibleMods().filter(([k])=>!['inicio','agenda','asistente'].includes(k)).map(([k,l])=>`<button data-mod="${k}"><span>${l}</span>${bd[k]?`<span class="chip c-info">${bd[k]}</span>`:''}</button>`).join('')}</div>`;
+  m.innerHTML=`<div class="more__p">${visibleMods().filter(([k])=>!['inicio','agenda','reservas'].includes(k)).map(([k,l])=>`<button data-mod="${k}"><span>${l}</span>${bd[k]?`<span class="chip c-info">${bd[k]}</span>`:''}</button>`).join('')}</div>`;
   m.hidden=false;m.onclick=e=>{const b=e.target.closest('[data-mod]');if(b)go(b.dataset.mod);else if(e.target===m)m.hidden=true}}
 const RENDER={};
 function render(){
@@ -1014,7 +1126,7 @@ function render(){
   const ae=document.activeElement; if(ae&&$('main').contains(ae)&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)){ OS._dirty=true; return }
   const r=RENDER[OS.mod]||RENDER.inicio;
   $('main').innerHTML=r();
-  const rn={inicio:'I',agenda:'II',clientas:'III',asistente:'IV',seguimiento:'V',ventas:'VI',redes:'VII',contenido:'VIII',inventario:'IX',finanzas:'X',ajustes:'XI'}[OS.mod];
+  const rn=null;
   const eb=$('main').querySelector('.mhead .eyebrow, .hero .eyebrow, .ag__bar');if(eb&&rn&&!eb.classList.contains('ag__bar'))eb.insertAdjacentHTML('afterbegin',`<em class="rn">${rn}</em>`);
   if(OS.mod==='asistente') afterChat();
   if(OS.mod==='inicio') maybeAutoBrief();
@@ -1157,43 +1269,71 @@ function attentionList(){
   return A.sort((a,b)=>(b.sev==='bad')-(a.sev==='bad'));
 }
 RENDER.inicio=()=>{
-  const t=today(),st=SET(),pay=payments();
+  const t=today(),pay=payments();
   const todays=D.bookings.filter(b=>b.date===t&&ACTIVE.has(effStatus(b))).sort((a,b)=>a.start.localeCompare(b.start));
   const nowM=new Date().getHours()*60+new Date().getMinutes();
-  let next=todays.find(b=>toMin(b.start)+b.dur>nowM&&b.status==='confirmed')||todays.find(b=>b.status==='done');
-  let nextLabel='Ahora o más tarde hoy';
-  if(!next){next=D.bookings.filter(b=>b.date>t&&['confirmed','hold'].includes(effStatus(b))).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))[0];nextLabel=next?'Tu próxima cita':''}
-  const A=attentionList();const top=A.slice(0,4),rest=A.slice(4);
-  const [w0,w1]=weekRange();const rev=revenue(pay.filter(p=>p.date>=w0&&p.date<=w1));const mrev=revenue(pay.filter(p=>p.date.slice(0,7)===t.slice(0,7)));const goalPct=Math.min(100,Math.round(mrev/st.monthlyGoal*100));
+  let next=todays.find(b=>toMin(b.start)+b.dur>nowM&&b.status==='confirmed')||todays.find(b=>b.status==='done'),nextLabel='';
+  if(next){const m=toMin(next.start)-nowM;nextLabel=next.status==='done'?'Lista para cobrar':m>0?`Tu próxima clienta · en ${m<60?m+' minutos':Math.round(m/60)+' h'}`:'Tu clienta de ahora'}
+  else{next=D.bookings.filter(b=>b.date>t&&['confirmed','hold'].includes(effStatus(b))).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))[0];nextLabel=next?'Tu próxima cita · '+shortD(next.date):''}
+  const A=attentionList();
+  const [w0,w1]=weekRange();const rev=revenue(pay.filter(p=>p.date>=w0&&p.date<=w1));
+  const wkN=D.bookings.filter(b=>b.date>=w0&&b.date<=w1&&ACTIVE.has(effStatus(b))).length;
+  const newC=D.clients.filter(c=>(c.createdAt||'').slice(0,10)>=w0).length;
   const nc=next?byId('clients',next.clientId):null,ncf=next?contraFor(next.serviceId,nc?.flags||next.flags):null;
-  const todo=a=>`<div class="todo"><span class="todo__i ${a.sev}" aria-hidden="true"></span><span>${a.txt}</span><button class="btn btn--sm ${a.sev==='bad'?'btn--pri':''}" data-goto="${a.go}" ${a.extra}>${a.btn}</button></div>`;
-  return `<section class="hero">
-    <div><span class="eyebrow">${esc(longDate(t))}</span><h1>${greet()}, <em>María Teresa.</em></h1>
-      <p style="margin-top:8px">${todays.length?`Hoy tienes <b style="color:var(--on-hero)">${todays.length} cita${todays.length>1?'s':''}</b>${A.length?` y ${A.length} cosa${A.length>1?'s':''} pendiente${A.length>1?'s':''}`:''}.`:'Hoy no tienes citas.'} ${A.filter(a=>a.sev==='bad').length?'Empieza por lo marcado en rojo.':'Todo lo importante está abajo.'}</p>
-      <div class="hero__acts"><button class="btn btn--pri" data-x="manual">+ Nueva cita</button><button class="btn btn--ghost" data-goto="asistente">Pregúntale a tu asistente</button></div></div>
-    ${next?`<div class="next"><span class="eyebrow">${nextLabel}</span><span class="next__t">${next.date===t?'':shortD(next.date)+' · '}${hm12(toMin(next.start))}</span><span class="next__n">${esc(next.client?.name)}</span><span style="color:var(--hero-mut);font-size:14px">${esc(next.serviceName)} · ${next.dur} min${ncf.block.length?' · <b style="color:#F3B3A6">revisar salud</b>':''}${needsConsent(next.serviceId)&&!next.consentId?' · <b style="color:#F3B3A6">falta firma</b>':''}</span>
-      <div class="hero__acts">${next.status==='confirmed'&&next.date===t?`<button class="btn btn--sm btn--pri" data-act="finish" data-id="${next.id}">Terminar y cobrar</button>`:''}${next.status==='done'?`<button class="btn btn--sm btn--pri" data-goto="agenda" data-day="${next.date}">Ver cobro</button>`:''}${needsConsent(next.serviceId)&&!next.consentId&&['confirmed','hold'].includes(next.status)?`<button class="btn btn--sm btn--cu" data-act="consent" data-id="${next.id}">Firmar</button>`:''}<button class="btn btn--sm btn--ghost" data-client="${next.clientId}">Ver ficha</button></div></div>`
-      :`<div class="next"><span class="eyebrow">Agenda libre</span><span class="next__n">No hay citas próximas.</span><div class="hero__acts"><button class="btn btn--sm btn--pri" data-x="campaign">Mandar una oferta</button></div></div>`}
-  </section>
-  <nav class="atajos" aria-label="Atajos">
-    <button data-x="manual"><span>Nueva cita</span><i>→</i></button>
-    <button data-goto="agenda" data-day="${t}"><span>Ver la agenda</span><i>→</i></button>
-    <button data-x="sell"><span>Vender un producto</span><i>→</i></button>
-    <button data-goto="seguimiento"><span>Mensajes a clientas</span><i>→</i></button>
-    <button data-x="block"><span>Bloquear una hora</span><i>→</i></button>
-    <button data-goto="clientas"><span>Buscar una clienta</span><i>→</i></button>
-  </nav>
-  <div class="cols"><div class="stack">
-    <div class="panel"><div class="panel__h"><h3>Lo que tienes que hacer</h3><span class="muted small">${A.length?A.length+' en total':'nada'}</span></div>
-      ${A.length?top.map(todo).join('')+(rest.length?`<details class="more-d"><summary>Ver ${rest.length} más</summary>${rest.map(todo).join('')}</details>`:''):`<div class="panel__b"><p class="muted">Todo al día.</p></div>`}</div>
-    <div class="panel" id="brief" ${OS.briefText?'':'hidden'}><div class="panel__h"><h3>Resumen del día</h3></div><div class="panel__b"><p id="brief-t" class="small" style="white-space:pre-wrap">${esc(OS.briefText||'')}</p></div></div>
-  </div><div class="stack">
-    <div class="panel"><div class="panel__h"><h3>Hoy</h3><button class="btn btn--sm btn--ghost" data-goto="agenda" data-day="${t}">Agenda →</button></div>
-      ${todays.length?`<div class="rows">${todays.map(b=>`<button class="rowbtn" data-appt="${b.id}" style="grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px"><span style="width:10px;height:36px;border-radius:5px;background:${catVar(b.category)}"></span><span style="display:grid"><span><b class="num">${hm12(toMin(b.start))}</b> · ${esc(b.client?.name)}</span><span class="muted small">${esc(b.serviceName)} · ${esc((STATUS[effStatus(b)]||[''])[0])}</span></span></button>`).join('')}</div>`:`<div class="panel__b"><p class="muted small">No hay citas hoy.</p></div>`}</div>
-    ${isOwnerView()?`<div class="panel"><div class="panel__h"><h3>Cómo vas</h3><button class="btn btn--sm btn--ghost" data-goto="finanzas">Finanzas →</button></div><div class="panel__b"><div class="ln"><span>Esta semana</span><b class="num">${money(rev)}</b></div><div class="ln"><span>Meta de ${MONL[new Date().getMonth()]}</span><b class="num">${goalPct}%</b></div><div class="prog"><span class="${goalPct>=100?'ok':''}" style="width:${goalPct}%"></span></div><p class="mini">${money(mrev)} de ${money(st.monthlyGoal)}</p></div></div>`:''}
-    <details class="panel more-d"><summary>Actividad reciente</summary>${feed(8)}</details>
-    <button class="btn btn--block" data-x="ask-brief">Prepárame el resumen del día</button>
-  </div></div>`;
+  const visits=nc?D.bookings.filter(b=>b.clientId===nc.id&&['paid','done'].includes(effStatus(b))).length:0;
+  const cc=b=>(CATC[b.category]||'--c-con').slice(4);
+  // línea del día con huecos libres de una hora o más
+  const tl=[];let cur=OPEN;
+  todays.forEach(b=>{const s0=toMin(b.start);if(s0-cur>=60)tl.push({free:true,a:cur,z:s0});tl.push(b);cur=Math.max(cur,s0+b.dur)});
+  if(todays.length&&CLOSE-cur>=60)tl.push({free:true,a:cur,z:CLOSE});
+  const tlHtml=todays.length?tl.map(x=>x.free?`<div class="h-tl__i"><span class="h-tl__t">${hm12(x.a)}</span><button class="h-free" data-x="manual"><span>Libre · ${hm12(x.a)} a ${hm12(x.z)}</span><span>Agendar →</span></button></div>`
+     :`<div class="h-tl__i"><span class="h-tl__t">${hm12(toMin(x.start))}</span><button class="h-appt" data-c="${cc(x)}" data-appt="${x.id}"><b>${esc(x.client?.name)}</b><span>${esc(x.serviceName)} · ${x.dur} min${effStatus(x)==='paid'?' · cobrada':''}</span></button></div>`).join('')
+     :`<p class="h-empty">Hoy no tienes citas.</p><button class="h-free" data-x="manual" style="margin-top:10px"><span>Tu día está libre</span><span>Agendar →</span></button>`;
+  const todo=a=>`<div class="h-todo__i"><i class="${a.sev}"></i><span>${a.txt}</span><button data-goto="${a.go}" ${a.extra}>${a.btn}</button></div>`;
+  const nextHtml=next?`<div class="h-next">
+      <p class="h-lbl">${nextLabel}</p><h2>${esc(next.client?.name)}</h2><p>${esc(next.serviceName)} · ${next.dur} min</p>
+      <div class="h-next__meta"><span>${hm12(toMin(next.start))} a ${hm12(toMin(next.start)+next.dur)}</span><span>${visits?visits+1+'ª visita':'Primera visita'}</span>${next.depositPaid?'<span>Depósito pagado</span>':''}</div>
+      ${ncf&&ncf.block.length?`<p class="h-alert">Revisa su salud antes de empezar</p>`:(nc?.flags||[]).length?`<p class="h-alert">${esc(nc.flags[0])} · tenlo en cuenta</p>`:''}
+      ${needsConsent(next.serviceId)&&!next.consentId?`<p class="h-alert">Falta firmar el consentimiento</p>`:''}
+      <div class="h-next__btns"><button class="btn btn--light" data-appt="${next.id}">Ver su cita</button>${next.status==='confirmed'&&next.date===t?`<button class="btn btn--line" data-act="finish" data-id="${next.id}">Terminar y cobrar</button>`:''}${next.status==='done'?`<button class="btn btn--line" data-act="clientpays" data-id="${next.id}">Cobrar</button>`:''}${needsConsent(next.serviceId)&&!next.consentId&&['confirmed','hold'].includes(next.status)?`<button class="btn btn--line" data-act="consent" data-id="${next.id}">Firmar</button>`:''}</div></div>`
+    :`<div class="h-next"><p class="h-lbl">Agenda libre</p><h2>No hay citas próximas.</h2><p>Un buen momento para escribirle a tus clientas.</p><div class="h-next__btns"><button class="btn btn--light" data-goto="seguimiento" data-x="campaign">Mandar una oferta</button></div></div>`;
+  return `<section class="h">
+    <p class="h-date">${esc(longDate(t))}</p><h1 class="h-title">${greet()}, <em>María Teresa.</em></h1>
+    <div class="h-grid">
+      <div class="h-col">
+        ${nextHtml}
+        <div class="h-quick">
+          <button data-x="manual"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><b>Nueva cita</b><span>Agendar a alguien</span></button>
+          <button data-goto="cobrar"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1"/><path d="M3 10h18"/></svg><b>Cobrar</b><span>Servicio o producto</span></button>
+          <button data-x="block"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6 6l12 12"/></svg><b>Bloquear</b><span>Una hora libre</span></button>
+        </div>
+        ${isOwnerView()?`<button class="h-stats" data-goto="finanzas"><p class="h-lbl">Esta semana</p><div><b>${wkN}</b><span>citas</span></div><div><b>${money(rev)}</b><span>cobrado</span></div><div><b>${newC}</b><span>clientas nuevas</span></div></button>`:''}
+      </div>
+      <div class="h-col">
+        <div class="h-day"><div class="h-day__h"><p class="h-lbl">Tu día · ${todays.length} cita${todays.length===1?'':'s'}</p><button class="h-link" data-goto="agenda" data-day="${t}">Agenda →</button></div><div class="h-tl">${tlHtml}</div></div>
+        <div class="h-todo"><p class="h-lbl">${A.length?`Para hoy · ${A.length} pendiente${A.length>1?'s':''}`:'Para hoy'}</p>
+          ${A.length?A.slice(0,3).map(todo).join('')+(A.length>3?`<details class="h-more"><summary>Ver ${A.length-3} más</summary>${A.slice(3).map(todo).join('')}</details>`:''):'<p class="h-empty">Todo al día.</p>'}</div>
+      </div>
+    </div></section>`;
+};
+
+/* ---------- RESERVAS EN LÍNEA ---------- */
+RENDER.reservas=()=>{
+  const st=SET(),on=st.onlineBooking!==false,url='mtaesthetics.org';
+  const [w0]=weekRange();
+  const web=D.bookings.filter(b=>b.source==='web'&&(b.createdAt||'').slice(0,10)>=w0).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+  return `<section class="h">
+    <p class="h-date">Así ven tus clientas la página para reservar.</p><h1 class="h-title">Reservas en línea</h1>
+    <div class="r-grid"><div>
+      <div class="r-sw"><div><b>Recibir reservas en línea</b><p>${on?'Encendido: tus clientas pueden reservar desde la web.':'Apagado: nadie puede reservar desde la web.'}</p></div><button class="tog" role="switch" aria-checked="${on}" data-x="toggle-online" aria-label="Recibir reservas en línea"></button></div>
+      <p class="h-lbl" style="margin-top:26px">Tu enlace para compartir</p>
+      <div class="r-link"><input value="${url}" readonly aria-label="Enlace"><button class="btn btn--pri" data-x="copy-link">Copiar</button></div>
+      <a class="btn btn--ghost btn--block" style="margin-top:8px" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent('Reserva tu hora en MT Aesthetics: https://'+url)}">Mandar por WhatsApp</a>
+      <p class="h-lbl" style="margin-top:32px">Llegaron en línea esta semana · ${web.length}</p>
+      <div class="r-list">${web.length?web.map(b=>`<button class="r-row" data-appt="${b.id}"><b>${esc(b.client?.name)}</b><span>${esc(b.serviceName)} · ${shortD(b.date)} ${hm12(toMin(b.start))}</span></button>`).join(''):'<p class="h-empty">Todavía ninguna esta semana.</p>'}</div>
+    </div>
+    <div class="r-phone"><iframe src="/reservar?embed=1" title="Vista previa de la página de reservas" loading="lazy"></iframe></div></div>
+  </section>`;
 };
 
 /* ---------- AGENDA (semana / día / lista) ---------- */
@@ -1209,7 +1349,7 @@ RENDER.agenda=()=>{
   const nowM=new Date().getHours()*60+new Date().getMinutes();
   const col=k=>{const closed=!HOURS[parseYmd(k).getDay()];
     const ev=D.bookings.filter(b=>b.date===k&&!['cancelled','noshow','expired'].includes(effStatus(b))).map(b=>{const st=effStatus(b);const c=byId('clients',b.clientId);const cf=contraFor(b.serviceId,c?.flags||b.flags);const warn=cf.block.length||(needsConsent(b.serviceId)&&!b.consentId&&['hold','confirmed'].includes(st));
-      return `<button class="ev ${st}" style="--evc:${catVar(b.category)};top:${(toMin(b.start)-OPEN)/60*HP+1}px;height:${Math.max(b.dur/60*HP-3,22)}px" data-appt="${b.id}" title="${esc(b.client?.name)} · ${esc(b.serviceName)}">${warn?'<i class="flag" aria-label="Necesita atención"></i>':''}${b.dur<=45?`<b><span class="tm">${hm12(toMin(b.start))}${st==='paid'?' ✓':''}</span> ${esc(b.client?.name)}</b>${b.dur>30?`<small>${esc(b.serviceName)}</small>`:''}`:`<span class="tm">${hm12(toMin(b.start))}${st==='paid'?' ✓':st==='done'?' · por cobrar':st==='hold'?' · sin pagar':''}</span><b>${esc(b.client?.name)}</b><small>${esc(b.serviceName)}</small>`}</button>`}).join('');
+      return `<button class="ev ${st}" data-c="${(CATC[b.category]||'--c-con').slice(4)}" style="--evc:${catVar(b.category)};top:${(toMin(b.start)-OPEN)/60*HP+1}px;height:${Math.max(b.dur/60*HP-3,22)}px" data-appt="${b.id}" title="${esc(b.client?.name)} · ${esc(b.serviceName)}">${warn?'<i class="flag" aria-label="Necesita atención"></i>':''}${b.dur<=45?`<b><span class="tm">${hm12(toMin(b.start))}${st==='paid'?' ✓':''}</span> ${esc(b.client?.name)}</b>${b.dur>30?`<small>${esc(b.serviceName)}</small>`:''}`:`<span class="tm">${hm12(toMin(b.start))}${st==='paid'?' ✓':st==='done'?' · por cobrar':st==='hold'?' · sin pagar':''}</span><b>${esc(b.client?.name)}</b><small>${esc(b.serviceName)}</small>`}</button>`}).join('');
     const bl=D.blocks.filter(x=>x.date===k).map(x=>`<div class="ev blk" style="top:${(toMin(x.start)-OPEN)/60*HP+1}px;height:${(toMin(x.end)-toMin(x.start))/60*HP-3}px"><span class="tm" style="color:var(--muted)">${hm12(toMin(x.start))}</span><b>${esc(x.reason||'Bloqueado')}</b><button class="btn btn--sm btn--ghost" data-unblock="${x.id}" style="justify-self:start;padding:1px 6px;font-size:11px">Quitar</button></div>`).join('');
     const now=k===t&&nowM>=OPEN&&nowM<=CLOSE?`<div class="nowline" style="top:${(nowM-OPEN)/60*HP}px"></div>`:'';
     return `<div class="wk__col ${closed?'closed':''} ${k===t?'today':''}" data-slotday="${k}" style="height:${H}px">${ev}${bl}${now}</div>`};
@@ -1843,7 +1983,7 @@ $('main').addEventListener('click',async e=>{
   if(t.dataset.delstaff){const st=SET();await saveSettings({staff:st.staff.filter(s=>s.id!==t.dataset.delstaff)});return}
   if(t.dataset.deltpl!==undefined){const st=SET();await saveSettings({templates:st.templates.filter((_,i)=>i!==+t.dataset.deltpl)});return}
   const x=t.dataset.x;
-  const X={manual:()=>openManual(t.dataset.cid),block:openBlock,newclient:openNewClient,campaign:()=>openCampaign(),product:openProduct,expense:openExpense,'ask-brief':()=>brief(),
+  const X={'toggle-online':()=>{const on=SET().onlineBooking!==false;saveSettings({onlineBooking:!on});toast(on?'Reservas en línea apagadas':'Reservas en línea encendidas');setTimeout(render,50)},'copy-link':async()=>{try{await navigator.clipboard.writeText('https://mtaesthetics.org');toast('Enlace copiado')}catch{toast('mtaesthetics.org')}},manual:()=>openManual(t.dataset.cid),block:openBlock,newclient:openNewClient,campaign:()=>openCampaign(),product:openProduct,expense:openExpense,'ask-brief':()=>brief(),
     clearchat:()=>{OS.chat=[];OS.actions=[];render()},sell:()=>openSell(t.dataset.cid),sellpkg:()=>openSellPkg(t.dataset.cid,t.dataset.pkg),sellmemb:()=>openSellMemb(t.dataset.cid),sellgift:openSellGift,
     chargememb:chargeMemberships,bdays:birthdays,mkorders:makeOrders,close:openClose,export:openExport,post:()=>openPost(null,t.dataset.date),ideas:()=>contentIdeas(t),pin:openPin,staff:openStaff,tpl:openTpl,wipe:openWipe};
   if(x&&X[x])return X[x]();
@@ -2017,12 +2157,13 @@ function showLock(){const h=lsGet('mt-pin','');if(!h)return;const L=$('lock');
    ===================================================================== */
 function applyTheme(){const t=lsGet('mt-theme','light');if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t)}
 applyTheme();
+(function(){function k(){const w=innerWidth,h=innerHeight,v=w>=1100?Math.max(.8,Math.min(1.9,Math.min(w/1440,h/900))):1;document.documentElement.style.setProperty('--k',v);const o=document.getElementById('os');if(o)o.style.zoom=v}addEventListener('resize',k);k()})();
 let MODE='os';
 function setMode(m){MODE=m;$('os').hidden=m!=='os';$('tabbar').hidden=m!=='os';$('web').hidden=m!=='web';
   $('m-os').setAttribute('aria-pressed',m==='os');$('m-web').setAttribute('aria-pressed',m==='web');lsSet('mt-mode',m);
   if(m==='web')renderWeb();render();scrollTo({top:0})}
 $('m-os').onclick=()=>{setMode('os');showLock()};$('m-web').onclick=()=>setMode('web');
-let startMode=lsGet('mt-mode','os');if(location.hash==='#reservar')startMode='web';
+let startMode='os';
 setMode(startMode);if(startMode==='os')showLock();
 (async()=>{
   await Promise.resolve();

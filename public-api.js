@@ -158,7 +158,7 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
     if (m) return send(res, 200, { name: 'MT Aesthetics', short_name: 'MT Parlour', start_url: `/c/${m[1]}`, scope: `/c/${m[1]}`, display: 'standalone', background_color: '#F4EFE6', theme_color: '#1F2D24', icons: [{ src: '/pub/app-icon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/pub/app-icon-512.png', sizes: '512x512', type: 'image/png' }] }, 'application/manifest+json');
 
     if (p === '/api/public/catalog') {
-      return send(res, 200, { cats: cat.CATS, services: cat.SERVICES.filter(s => s.id !== 'consulta').map(svcPublic).concat([svcPublic(cat.SVC['consulta'])]), health: cat.HEALTH, hours: cat.HOURS, policy: { deposit: settings().deposit, refundHours: settings().refundHours, daysAhead: BOOK_DAYS_AHEAD }, payments: integrations.payments, today: ymdNY() });
+      return send(res, 200, { cats: cat.CATS, services: cat.SERVICES.filter(s => s.id !== 'consulta').map(svcPublic).concat([svcPublic(cat.SVC['consulta'])]), health: cat.HEALTH, hours: cat.HOURS, policy: { deposit: settings().deposit, refundHours: settings().refundHours, daysAhead: BOOK_DAYS_AHEAD }, payments: integrations.payments, open: settings().onlineBooking !== false, today: ymdNY() });
     }
     if (p === '/api/public/slots') {
       const s = cat.SVC[url.searchParams.get('service')], date = url.searchParams.get('date') || '';
@@ -175,6 +175,7 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
       if (limited(req, 'book', 8, 60)) return send(res, 429, { error: 'Demasiados intentos. Intenta más tarde o escríbenos por WhatsApp.' });
       let b; try { b = JSON.parse(await readBody(req, 20000)); } catch { return send(res, 400, { error: 'bad_request' }); }
       if (b.website) return send(res, 200, { ok: true });   // trampa para bots
+      if (settings().onlineBooking === false) return send(res, 403, { error: 'Las reservas en línea están en pausa. Escríbele a María por WhatsApp para agendar.' });
       const s = cat.SVC[b.serviceId]; const name = str(b.name, 80), phone = str(b.phone, 30), email = str(b.email, 120);
       if (!s || !isDate(b.date) || !isHM(b.start)) return send(res, 400, { error: 'Falta escoger el servicio, el día o la hora.' });
       if (name.length < 2 || digits(phone).length < 10) return send(res, 400, { error: 'Escribe tu nombre y un teléfono de 10 dígitos.' });
