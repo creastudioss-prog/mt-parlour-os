@@ -185,7 +185,7 @@ document.addEventListener('click',async e=>{
   if(a==='move'){const x=P.upcoming.find(u=>u.id===b.dataset.id);openPicker('move',x.id,x.serviceId,'Cambiar '+x.serviceName);return}
   if(a==='rebook'){openPicker('book',null,P.rebook.serviceId,P.rebook.serviceName);return}
   if(a==='pickok'){b.disabled=true;try{P=await api(pick.mode==='move'?'/reschedule':'/book',pick.mode==='move'?{bookingId:pick.id,date:pick.date,start:pick.time}:{serviceId:pick.serviceId,date:pick.date,start:pick.time});if(P.payUrl){location.href=P.payUrl;return}closeSheet();render();toast(pick.mode==='move'?'Cita cambiada':'Cita reservada')}catch(err){pick.err=err.message;drawPicker()}return}
-  if(a==='cancel'){const x=P.upcoming.find(u=>u.id===b.dataset.id);if(!confirm('¿Cancelar tu '+x.serviceName+' del '+longDate(x.date)+'?'))return;try{P=await api('/cancel',{bookingId:x.id});render();toast(P.refunded?'Cita cancelada. Te devolvemos tu depósito en 5 a 10 días.':'Cita cancelada')}catch(err){toast(err.message)}return}
+  if(a==='cancel'){const x=P.upcoming.find(u=>u.id===b.dataset.id);if(!confirm('¿Cancelar tu '+x.serviceName+' del '+longDate(x.date)+'?'+(x.depositPaid?'\n\nTu depósito de $'+x.deposit+' no es reembolsable. Si prefieres, cambia la fecha y lo conservas.':'')))return;try{P=await api('/cancel',{bookingId:x.id});render();toast('Cita cancelada')}catch(err){toast(err.message)}return}
   if(a==='consent'){openConsent(b.dataset.id);return}
   if(a==='sign'){try{P=await api('/consent',{bookingId:b.dataset.id,signature:$('#c-sig').value,agree:$('#c-ok').checked});closeSheet();render();toast('Consentimiento firmado')}catch(err){$('#c-err').innerHTML=`<div class="err">${esc(err.message)}</div>`}return}
 });

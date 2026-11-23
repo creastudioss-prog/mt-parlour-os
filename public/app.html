@@ -1007,7 +1007,7 @@ function renderWeb(){
       ${cons?`<div class="field"><span class="lbl">Consentimiento informado</span><div class="consent">${esc(consentText(s,f.name))}</div>${sigHTML('f-sig')}</div>`:''}
       <label class="chk"><input type="checkbox" id="f-mkt" ${f.mkt?'checked':''}> Acepto que usen fotos de mi tratamiento (sin mostrar mi cara) en redes</label>
       <p class="err" id="f-err" ${C.err?'':'hidden'}>${esc(C.err)}</p>
-      ${full?`<p class="warnbox">Por citas anteriores sin asistir, esta reserva se paga completa por adelantado: <b>${money(s.price||dep)}</b>.</p>`:`<p class="policy">Para apartar tu horario pedimos un depósito de <b>${money(dep)}</b> que se descuenta del total. Si cancelas con más de 24 horas, se te devuelve. Si no llegas o cancelas con menos, se queda como cargo.</p>`}
+      ${full?`<p class="warnbox">Por citas anteriores sin asistir, esta reserva se paga completa por adelantado: <b>${money(s.price||dep)}</b>.</p>`:`<p class="policy">Para apartar tu horario pedimos un depósito de <b>${money(dep)}</b> que se descuenta del total y no es reembolsable. Si cambias tu cita con más de 24 horas de anticipación, pasa a la nueva fecha. Si cancelas, cambias con menos de 24 horas o no llegas, no se devuelve.</p>`}
       <button class="btn btn--pri btn--block" type="submit">${full?'Pagar y reservar · '+money(s.price||dep):'Apartar y pagar depósito · '+money(dep)}</button></form>`}
   else {const b=byId('bookings',C.bookingId)||C._last,s=SVC[C.svc];
     h=`${steps(4)}<div class="done"><div class="seal">✓</div><span class="eyebrow">Cita confirmada</span><h1>Te esperamos, ${esc(first(b?.client?.name))}.</h1>
@@ -1254,8 +1254,8 @@ function openCancel(b,noshow){const h=hoursUntil(b),st=SET();const early=h>=st.r
   const wl=D.waitlist.filter(w=>w.status==='esperando'&&(!w.date||w.date===b.date));
   dialog(`<div class="dlg__h"><h2>${noshow?'No llegó':'Cancelar cita'}</h2><button type="button" data-close aria-label="Cerrar">×</button></div>
     <p class="muted">${esc(b.client?.name)} · ${esc(b.serviceName)} · ${shortD(b.date)} ${hm12(toMin(b.start))}</p>
-    ${paid?(noshow?`<div class="warnbox">Según la política, el depósito de ${money(b.deposit)} se queda como cargo.</div>`:early?`<div class="okbox">Cancela con ${Math.floor(h)} horas de anticipación: se le devuelve el depósito de ${money(b.deposit)}.</div>`:`<div class="warnbox">Cancela con menos de ${st.refundHours} horas: el depósito de ${money(b.deposit)} se queda como cargo.</div>`):'<p class="small muted">No había depósito pagado.</p>'}
-    ${paid?`<label class="chk"><input type="checkbox" id="cx-ref" ${!noshow&&early?'checked':''}> Devolver el depósito</label>`:''}
+    ${paid?(noshow?`<div class="warnbox">Según la política, el depósito de ${money(b.deposit)} se queda como cargo.</div>`:early?`<div class="warnbox">El depósito de ${money(b.deposit)} no es reembolsable. Si la clienta prefiere, cámbiale la fecha y lo conserva. Solo devuélvelo como excepción.</div>`:`<div class="warnbox">Cancela con menos de ${st.refundHours} horas: el depósito de ${money(b.deposit)} se queda como cargo.</div>`):'<p class="small muted">No había depósito pagado.</p>'}
+    ${paid?`<label class="chk"><input type="checkbox" id="cx-ref"> Devolver el depósito (excepción)</label>`:''}
     ${noshow?`<p class="small muted">${clientStats(b.clientId).noshows+1>=st.fullPayAfterNoShows?`Con esta ya son ${clientStats(b.clientId).noshows+1} faltas: sus próximas reservas se pagarán completas por adelantado.`:'Si vuelve a faltar, sus reservas se pagarán completas por adelantado.'}</p>`:''}
     ${!noshow&&wl.length?`<label class="chk"><input type="checkbox" id="cx-wl" checked> Avisar a ${wl.length} persona${wl.length>1?'s':''} en lista de espera</label>`:''}
     <button class="btn btn--pri btn--block" type="submit">${noshow?'Marcar que no llegó':'Cancelar cita'}</button>`,

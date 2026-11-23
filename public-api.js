@@ -73,7 +73,7 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
     return j;
   }
   const baseUrl = req => process.env.PUBLIC_URL || `${(req.headers['x-forwarded-proto'] || 'https').split(',')[0]}://${req.headers['x-forwarded-host'] || req.headers.host}`;
-  const POLICY = S => `Tu depósito de $${S.deposit} aparta tu hora y se descuenta del total de tu servicio. Puedes cambiar o cancelar gratis hasta ${S.refundHours} horas antes desde tu app y te devolvemos el depósito. Si cancelas con menos de ${S.refundHours} horas o no llegas, el depósito no se devuelve.`;
+  const POLICY = S => `Tu depósito de $${S.deposit} aparta tu hora, se descuenta del total de tu servicio y no es reembolsable. Si cambias tu cita con más de ${S.refundHours} horas de anticipación desde tu app, el depósito pasa a la nueva fecha. Si cancelas, cambias con menos de ${S.refundHours} horas o no llegas, el depósito no se devuelve.`;
   async function startDeposit(booking, req) {
     if (!STRIPE) return null;
     const S = settings(), base = baseUrl(req);
@@ -177,7 +177,7 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
     const consents = Object.values(col('consents')).filter(x => x.clientId === id);
     const upcoming = all.filter(b => b.date >= t0 && ['confirmed', 'hold'].includes(eff(b))).map(b => ({
       id: b.bid, serviceName: label(cat.SVC[b.serviceId]) || b.serviceName, serviceId: b.serviceId, category: b.category, date: b.date, start: b.start, dur: b.dur, status: eff(b),
-      canChange: hoursUntil(b) >= (S.refundHours || 24),
+      canChange: hoursUntil(b) >= (S.refundHours || 24), depositPaid: !!b.depositPaid && !b.depositRefunded, deposit: b.deposit,
       needsConsent: cat.needsConsent(b.serviceId), consentSigned: !!b.consentId || consents.some(x => x.bookingId === b.bid)
     }));
     const visits = all.filter(b => ['done', 'paid'].includes(b.status));
@@ -303,8 +303,7 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
         if (!mine || !['confirmed', 'hold'].includes(eff(bk))) return send(res, 400, { error: 'No se encontró esa cita.' });
         if (hoursUntil(bk) < (settings().refundHours || 24)) return send(res, 409, { error: `Faltan menos de ${settings().refundHours || 24} horas. Para cancelar, escríbele a María por WhatsApp.` });
         bk.status = 'cancelled'; bk.cancelledAt = new Date().toISOString(); bk.cancelledBy = 'clienta'; skipReminders(body.bookingId); commit(); notify('cancelled', c, bk);
-        if (bk.depositPaid && !bk.depositRefunded) await refundDeposit(body.bookingId);
-        return send(res, 200, { ...profile(id, c), refunded: !!bk.depositRefunded, refundPending: !!bk.refundPending });
+        return send(res, 200, profile(id, c));
       }
       if (action === '/reschedule') {
         if (!mine || !['confirmed', 'hold'].includes(eff(bk))) return send(res, 400, { error: 'No se encontró esa cita.' });

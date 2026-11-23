@@ -183,10 +183,11 @@ function render(){
       <label class="lbl" for="f-note">¿Algo que María deba saber? (opcional)</label><textarea class="inp" id="f-note">${esc(f.note)}</textarea>
       <div class="hp" aria-hidden="true"><label>Sitio web <input id="f-web" tabindex="-1" autocomplete="off"></label></div>
       <span class="lbl">Política de citas</span>
-      ${CAT.payments?`<div class="pol"><b>Depósito de $${CAT.policy.deposit}</b><ul>
+      ${CAT.payments?`<div class="pol"><b>Depósito de $${CAT.policy.deposit} no reembolsable</b><ul>
         <li>Aparta tu hora y se descuenta del total de tu servicio el día de tu cita.</li>
-        <li>Puedes cambiar o cancelar gratis hasta ${CAT.policy.refundHours} horas antes desde tu app. Si cancelas a tiempo, te devolvemos el depósito.</li>
-        <li>Si cancelas con menos de ${CAT.policy.refundHours} horas o no llegas, el depósito no se devuelve.</li>
+        <li>No es reembolsable.</li>
+        <li>Si cambias tu cita con más de ${CAT.policy.refundHours} horas de anticipación desde tu app, el depósito pasa a la nueva fecha.</li>
+        <li>Si cancelas, cambias con menos de ${CAT.policy.refundHours} horas o no llegas, el depósito no se devuelve.</li>
         <li>Si llegas tarde, tu servicio puede acortarse para no retrasar a la siguiente clienta.</li></ul></div>
       <label class="chk"><input type="checkbox" id="f-agree" ${f.agree?'checked':''}> Leí y acepto la política de citas y depósito.</label>`
       :`<label class="chk"><input type="checkbox" id="f-agree" ${f.agree?'checked':''}> Entiendo que puedo cambiar o cancelar mi cita hasta ${CAT.policy.refundHours} horas antes desde mi app.</label>`}
