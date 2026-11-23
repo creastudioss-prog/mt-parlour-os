@@ -648,6 +648,21 @@ a.btn{text-decoration:none!important;color:var(--euca)}
   .h-next h2{font-size:28px}
   .r-phone{max-width:320px;margin:0 auto}
 }
+
+/* agenda y reservas con el mismo lenguaje que Hoy */
+:root,:root[data-theme="light"]{--paper:#EFE4D2;--c-fac:#D4A5A0;--c-mas:#D3BE9C;--c-wax:#F4EFE6;--c-hifu:#1F2D24;--c-con:transparent;--cal-free:#E6D6BE}
+.panel,.mcal,.cal,.wk,.legend,.agside>*{border:0!important;border-radius:4px!important}
+.rnd{border-radius:3px!important}
+.ag__title{font-family:var(--display);font-weight:300;font-variation-settings:"SOFT" 100;font-size:22px}
+.h-head{margin-bottom:-6px}
+.h-head .h-title{margin-bottom:0}
+.legend i{border-radius:2px!important;box-shadow:inset 0 0 0 1px rgba(31,45,36,.25)}
+.legend{background:var(--oat);padding:18px 20px}
+.mcal__d.today,.mcal__d[aria-pressed="true"]{border-radius:3px!important}
+.r-phone{background:transparent;padding:0;border-radius:0}
+.r-phone__s{position:relative;width:340px;height:704px;margin:0 auto;background:#15211A;border-radius:44px;padding:12px;box-shadow:0 30px 60px rgba(21,33,26,.18)}
+.r-phone__notch{position:absolute;top:22px;left:50%;width:92px;height:24px;margin-left:-46px;background:#15211A;border-radius:14px;z-index:2}
+.r-phone__s iframe{display:block;width:395px;height:850px;border:0;border-radius:38px;background:var(--cream);transform:scale(.8);transform-origin:0 0}
 </style>
 
 <header class="bar">
@@ -1287,11 +1302,11 @@ RENDER.inicio=()=>{
   todays.forEach(b=>{const s0=toMin(b.start);if(s0-cur>=60)tl.push({free:true,a:cur,z:s0});tl.push(b);cur=Math.max(cur,s0+b.dur)});
   if(todays.length&&CLOSE-cur>=60)tl.push({free:true,a:cur,z:CLOSE});
   const tlHtml=todays.length?tl.map(x=>x.free?`<div class="h-tl__i"><span class="h-tl__t">${hm12(x.a)}</span><button class="h-free" data-x="manual"><span>Libre · ${hm12(x.a)} a ${hm12(x.z)}</span><span>Agendar →</span></button></div>`
-     :`<div class="h-tl__i"><span class="h-tl__t">${hm12(toMin(x.start))}</span><button class="h-appt" data-c="${cc(x)}" data-appt="${x.id}"><b>${esc(x.client?.name)}</b><span>${esc(x.serviceName)} · ${x.dur} min${effStatus(x)==='paid'?' · cobrada':''}</span></button></div>`).join('')
+     :`<div class="h-tl__i"><span class="h-tl__t">${hm12(toMin(x.start))}</span><button class="h-appt" data-c="${cc(x)}" data-appt="${x.id}"><b>${esc(x.client?.name)}</b><span>${esc(x.serviceName)}${/min/.test(x.serviceName)?'':' · '+x.dur+' min'}${effStatus(x)==='paid'?' · cobrada':''}</span></button></div>`).join('')
      :`<p class="h-empty">Hoy no tienes citas.</p><button class="h-free" data-x="manual" style="margin-top:10px"><span>Tu día está libre</span><span>Agendar →</span></button>`;
   const todo=a=>`<div class="h-todo__i"><i class="${a.sev}"></i><span>${a.txt}</span><button data-goto="${a.go}" ${a.extra}>${a.btn}</button></div>`;
   const nextHtml=next?`<div class="h-next">
-      <p class="h-lbl">${nextLabel}</p><h2>${esc(next.client?.name)}</h2><p>${esc(next.serviceName)} · ${next.dur} min</p>
+      <p class="h-lbl">${nextLabel}</p><h2>${esc(next.client?.name)}</h2><p>${esc(next.serviceName)}${/min/.test(next.serviceName)?'':' · '+next.dur+' min'}</p>
       <div class="h-next__meta"><span>${hm12(toMin(next.start))} a ${hm12(toMin(next.start)+next.dur)}</span><span>${visits?visits+1+'ª visita':'Primera visita'}</span>${next.depositPaid?'<span>Depósito pagado</span>':''}</div>
       ${ncf&&ncf.block.length?`<p class="h-alert">Revisa su salud antes de empezar</p>`:(nc?.flags||[]).length?`<p class="h-alert">${esc(nc.flags[0])} · tenlo en cuenta</p>`:''}
       ${needsConsent(next.serviceId)&&!next.consentId?`<p class="h-alert">Falta firmar el consentimiento</p>`:''}
@@ -1332,7 +1347,7 @@ RENDER.reservas=()=>{
       <p class="h-lbl" style="margin-top:32px">Llegaron en línea esta semana · ${web.length}</p>
       <div class="r-list">${web.length?web.map(b=>`<button class="r-row" data-appt="${b.id}"><b>${esc(b.client?.name)}</b><span>${esc(b.serviceName)} · ${shortD(b.date)} ${hm12(toMin(b.start))}</span></button>`).join(''):'<p class="h-empty">Todavía ninguna esta semana.</p>'}</div>
     </div>
-    <div class="r-phone"><iframe src="/reservar?embed=1" title="Vista previa de la página de reservas" loading="lazy"></iframe></div></div>
+    <div class="r-phone"><div class="r-phone__s"><iframe src="/reservar?embed=1" title="Vista previa de la página de reservas" loading="lazy"></iframe></div><p class="h-lbl" style="text-align:center;margin-top:12px">Vista previa en vivo</p></div></div>
   </section>`;
 };
 
@@ -1365,13 +1380,13 @@ RENDER.agenda=()=>{
   const wl=D.waitlist.filter(w=>w.status==='esperando');
   const dayItems=[...D.bookings.filter(b=>b.date===OS.day).map(b=>({k:'b',t:toMin(b.start),b})),...D.blocks.filter(k=>k.date===OS.day).map(k=>({k:'k',t:toMin(k.start),x:k}))].sort((a,b)=>a.t-b.t);
   const list=`<div class="panel">${dayItems.length?dayItems.map(it=>it.k==='k'?`<div class="blockrow"><span><b class="num">${hm12(toMin(it.x.start))}–${hm12(toMin(it.x.end))}</b> · Bloqueado${it.x.reason?' · '+esc(it.x.reason):''}</span><button class="btn btn--sm btn--ghost" data-unblock="${it.x.id}">Quitar</button></div>`:apptRow(it.b)).join(''):`<div class="panel__b"><div class="empty">Sin citas este día.</div></div>`}</div>`;
-  return `<div class="ag__bar"><div class="ag__nav"><button class="btn btn--sm" data-agtoday>Hoy</button><button class="rnd" data-agmove="-1" aria-label="Anterior">‹</button><button class="rnd" data-agmove="1" aria-label="Siguiente">›</button><span class="ag__title">${esc(title)}</span></div>
+  return `<div class="h-head"><div><p class="h-date">Toca una cita para verla, o un espacio vacío para agendar.</p><h1 class="h-title">Agenda</h1></div></div><div class="ag__bar"><div class="ag__nav"><button class="btn btn--sm" data-agtoday>Hoy</button><button class="rnd" data-agmove="-1" aria-label="Anterior">‹</button><button class="rnd" data-agmove="1" aria-label="Siguiente">›</button><span class="ag__title">${esc(title)}</span></div>
     <div class="ag__nav"><div class="seg" role="group" aria-label="Vista">${[['dia','Día'],['semana','Semana'],['lista','Lista']].map(([k,l])=>`<button data-agview="${k}" aria-pressed="${v===k}">${l}</button>`).join('')}</div><button class="btn" data-x="block">Bloquear</button><button class="btn btn--pri" data-x="manual">+ Cita</button></div></div>
-  ${lsGet('mt-tip-ag',false)?'':`<p class="tip">Toca un espacio vacío para crear una cita a esa hora; toca una cita para cobrar, moverla o cancelarla. El punto rojo avisa que falta una firma o hay que revisar la salud. <button data-tipok>Entendido</button></p>`}
+
   <div class="ag"><div class="ag__side">
     <div class="panel"><div class="panel__b mini-cal"><div class="mcal__h"><b>${MONL[mm-1]} ${yy}</b><div class="mcal__nav"><button data-agmonth="-1" aria-label="Mes anterior">‹</button><button data-agmonth="1" aria-label="Mes siguiente">›</button></div></div>
       <div class="mcal">${['l','m','m','j','v','s','d'].map(d=>`<span class="mcal__dw">${d}</span>`).join('')}${mini.join('')}</div></div></div>
-    <div class="panel"><div class="panel__b legend">${[['Faciales','Faciales'],['Masajes','Masajes'],['Wax · Mujeres','Wax'],['HIFU','HIFU'],['Consulta','Consulta']].map(([c,l])=>`<span><i style="--lc:${catVar(c)}"></i>${l}</span>`).join('')}<span><i style="--lc:transparent;border:1px dashed var(--line-2)"></i>Esperando pago</span></div></div>
+    <div class="panel"><div class="panel__b legend">${[['Faciales','Faciales'],['Masajes','Masajes'],['Wax · Mujeres','Cera'],['HIFU','HIFU'],['Consulta','Consulta']].map(([c,l])=>`<span><i style="--lc:${catVar(c)}"></i>${l}</span>`).join('')}<span><i style="--lc:transparent;border:1px dashed var(--line-2)"></i>Esperando pago</span></div></div>
     ${wl.length?`<button class="btn btn--cu" data-goto="ventas" data-ventab="espera">${wl.length} en lista de espera →</button>`:''}
   </div><div>${v==='lista'?list:grid}</div></div>`;
 };
