@@ -84,6 +84,22 @@ textarea.inp{min-height:70px;resize:vertical}
 .foot a{color:var(--euc);text-underline-offset:3px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .empty{text-align:center;color:var(--gris);padding:18px 0}
+.cal{background:var(--paper);border:1px solid var(--line);padding:18px 18px 14px;margin:20px 0 6px}
+.cal__h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cal__h b{font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 100;font-size:21px}
+.cal__nav{width:34px;height:34px;border:0;background:none;font-size:20px;color:var(--euc);cursor:pointer;border-radius:50%}
+.cal__nav:hover{background:rgba(31,45,36,.06)}.cal__nav[disabled]{opacity:.25;cursor:default}
+.cal__w,.cal__g{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.cal__w span{font-size:12px;color:var(--gris);padding-bottom:8px}
+.cal__g{row-gap:4px}
+.cd{position:relative;justify-self:center;width:40px;height:40px;border:0;border-radius:50%;background:none;font-size:15px;color:var(--euc);cursor:pointer;transition:background .2s,color .2s}
+.cd:hover:not([disabled]){background:rgba(31,45,36,.07)}
+.cd[disabled]{color:rgba(31,45,36,.22);cursor:default}
+.cd--today::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor}
+.cd[aria-pressed=true],.cd[aria-pressed=true]:hover{background:var(--euc)!important;color:var(--cream)!important}
+.times{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))!important}
+.time{border-radius:999px!important;background:var(--paper)!important}
+.time[aria-pressed=true]{background:var(--euc)!important}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -98,6 +114,7 @@ const NAME=c=>c.replace('Wax','Cera');
 const CATQ={faciales:'Faciales',masajes:'Masajes',cera:'Wax · Mujeres',hifu:'HIFU'};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const DOW=['dom','lun','mar','mié','jue','vie','sáb'],MONL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const monKey=m=>m[0]*12+m[1];
 const pd=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const longDate=s=>{const d=pd(s);return ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'][d.getDay()]+' '+d.getDate()+' de '+MONL[d.getMonth()]};
 const h12=hm=>{let[h,m]=hm.split(':').map(Number);return ((h+11)%12+1)+':'+String(m).padStart(2,'0')+(h>=12?' pm':' am')};
@@ -127,12 +144,14 @@ function render(){
   }
   if(S.step===2){
     const t0=pd(CAT.today);const ds=[];for(let i=0;i<=CAT.policy.daysAhead;i++){const d=new Date(t0);d.setDate(t0.getDate()+i);ds.push(d)}
+    const MIN=[t0.getFullYear(),t0.getMonth()],MX=new Date(t0);MX.setDate(t0.getDate()+CAT.policy.daysAhead);const MAX=[MX.getFullYear(),MX.getMonth()];if(!S.mon){const sd=S.date?pd(S.date):(()=>{const k=Object.keys(S.days).sort()[0];return k?pd(k):t0})();S.mon=[sd.getFullYear(),sd.getMonth()]}
     const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     a.innerHTML=steps()+`<div class="sum"><b>${esc(S.svc.name)}</b><p>${S.svc.dur} min · ${S.svc.priceFrom?'desde $'+S.svc.priceFrom:'sin costo'}</p></div>
-    <span class="lbl">Día</span><div class="days" id="days">${ds.map(d=>{const k=ymd(d),n=S.days[k];return `<button class="day" data-day="${k}" ${n?'':'disabled'} aria-pressed="${S.date===k}" aria-label="${longDate(k)}${n?'':', sin horario'}"><span>${DOW[d.getDay()]}</span><b>${d.getDate()}</b><i>${d.getDate()===1||ds[0]===d?MONL[d.getMonth()].slice(0,3):''}</i></button>`}).join('')}</div>
+    <div class="cal"><div class="cal__h"><b>${MONL[S.mon[1]][0].toUpperCase()+MONL[S.mon[1]].slice(1)} ${S.mon[0]}</b><span><button class="cal__nav" data-mon="-1" aria-label="Mes anterior" ${monKey(S.mon)<=monKey(MIN)?'disabled':''}>‹</button><button class="cal__nav" data-mon="1" aria-label="Mes siguiente" ${monKey(S.mon)>=monKey(MAX)?'disabled':''}>›</button></span></div>
+    <div class="cal__w">${['lu','ma','mi','ju','vi','sá','do'].map(x=>`<span>${x}</span>`).join('')}</div>
+    <div class="cal__g">${(()=>{const f=new Date(S.mon[0],S.mon[1],1),off=(f.getDay()+6)%7,n=new Date(S.mon[0],S.mon[1]+1,0).getDate();let h='';for(let j=0;j<off;j++)h+='<span></span>';for(let d=1;d<=n;d++){const k=ymd(new Date(S.mon[0],S.mon[1],d)),ok=S.days[k];h+=`<button class="cd${k===CAT.today?' cd--today':''}" data-day="${k}" ${ok?'':'disabled'} aria-pressed="${S.date===k}" aria-label="${longDate(k)}${ok?'':', sin horario'}">${d}</button>`}return h})()}</div></div>
     <span class="lbl">Hora${S.date?' · '+longDate(S.date):''}</span>
     <div id="times">${!S.date?'<p class="hint">Escoge un día para ver los horarios.</p>':S.slots.length?`<div class="times">${S.slots.map(t=>`<button class="time" data-time="${t}" aria-pressed="${S.time===t}">${h12(t)}</button>`).join('')}</div>`:'<p class="hint">No quedan horarios ese día.</p>'}</div>`;
-    const sel=a.querySelector('.day[aria-pressed=true]')||a.querySelector('.day:not([disabled])');sel&&sel.scrollIntoView({inline:'center',block:'nearest'});
     bar(`<button class="btn btn--ghost" id="back">Atrás</button><button class="btn" id="next" ${S.time?'':'disabled'}>Continuar</button>`);
   }
   if(S.step===3){
@@ -177,7 +196,8 @@ function readForm(){const f=S.f;f.name=$('#f-name').value.trim();f.phone=$('#f-p
 document.addEventListener('click',async e=>{
   const t=e.target.closest('button');if(!t)return;
   if(t.dataset.cat){S.cat=t.dataset.cat;render();return}
-  if(t.dataset.svc){S.svc=CAT.services.find(s=>s.id===t.dataset.svc);S.date=null;S.time=null;render();return}
+  if(t.dataset.svc){S.svc=CAT.services.find(s=>s.id===t.dataset.svc);S.date=null;S.time=null;S.mon=null;render();return}
+  if(t.dataset.mon){const m=S.mon[0]*12+S.mon[1]+Number(t.dataset.mon);S.mon=[Math.floor(m/12),m%12];render();return}
   if(t.dataset.day){S.date=t.dataset.day;S.time=null;await loadSlots();render();return}
   if(t.dataset.time){S.time=t.dataset.time;render();return}
   if(t.id==='back'){if(S.step===3)readForm();S.err='';S.step--;render();scrollTo(0,0);return}
