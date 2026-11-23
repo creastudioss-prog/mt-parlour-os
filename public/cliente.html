@@ -78,10 +78,21 @@ ul.care li span{font-family:var(--serif);font-style:italic;color:var(--copper);m
 .foot{text-align:center;font-size:13px;color:rgba(26,26,26,.55);margin-top:34px}
 .foot a{color:var(--euc)}
 [hidden]{display:none!important}
+
+/* marca 2026 */
+.hero small{text-transform:none!important;letter-spacing:.02em!important;font-size:13px!important;color:rgba(244,239,230,.7)!important}
+.hero h1{font-weight:300!important;font-variation-settings:"SOFT" 100,"WONK" 0!important}
+.hero h1 em{color:inherit!important}
+.eb,.tag,.day span{text-transform:none!important;letter-spacing:.01em!important;font-size:13px!important}
+.btn{border-radius:3px!important;text-transform:none!important;letter-spacing:.03em!important;font-size:14px!important;font-weight:500!important}
+.tag{border-radius:3px!important;font-size:12px!important}
+.card{background:var(--oat)!important;border:0!important;border-radius:4px!important}
+.install{border-radius:4px!important}
+ul.care li span{font-family:var(--sans)!important;font-style:normal!important;color:var(--gris,#5A6359)!important;font-size:13px;padding-top:2px}
 </style>
 </head>
 <body>
-<header class="hero"><div class="in"><img src="/pub/silueta-verde.svg" alt=""><div><small>MT Aesthetics · The Parlour</small><h1 id="hello">Tu <em>parlour</em></h1></div></div></header>
+<header class="hero"><div class="in"><img src="/pub/silueta-crema.svg" alt=""><div><small>mt aesthetics</small><h1 id="hello">Tu <em>espacio</em></h1></div></div></header>
 <main id="app"><p class="empty" style="margin-top:24px">Cargando…</p></main>
 <div id="sheet" class="sheet" hidden></div>
 <div id="toast" class="toast" hidden></div>
@@ -125,12 +136,12 @@ function render(){
     ${!b.canChange?`<p class="meta" style="margin:10px 0 0">Faltan menos de ${P.policy.refundHours} horas: para cambios, escríbele a María.</p>`:''}</div>`).join(''):`<div class="card"><p class="empty">No tienes citas próximas.</p><div class="acts"><a class="btn" href="/reservar">Reservar</a></div></div>`}</section>`);
   if(P.rebook)secs.push(`<section><p class="eb">Te toca volver <i>para mantener tus resultados</i></p><div class="card"><b style="font-family:var(--serif);font-weight:440;font-size:20px">${esc(P.rebook.serviceName)}</b><p class="when" style="margin:4px 0 0">Lo ideal: alrededor del ${longDate(P.rebook.due)}</p><div class="acts"><button class="btn" data-act="rebook">Reservar de nuevo</button></div></div></section>`);
   if(P.note)secs.push(`<section><p class="eb">De María Teresa</p><div class="card"><p class="note" style="margin:0">${esc(P.note)}</p></div></section>`);
-  if(P.aftercare)secs.push(`<section><p class="eb">Cuidados en casa <i>${esc(P.aftercare.service)}</i></p><div class="card"><ul class="care">${P.aftercare.items.map((x,i)=>`<li><span>${['i','ii','iii','iv','v','vi'][i]}</span>${esc(x)}</li>`).join('')}</ul></div></section>`);
+  if(P.aftercare)secs.push(`<section><p class="eb">Cuidados en casa · ${esc(P.aftercare.service)}</p><div class="card"><ul class="care">${P.aftercare.items.map((x,i)=>`<li><span>${i+1}</span>${esc(x)}</li>`).join('')}</ul></div></section>`);
   if(P.packages.length||P.membership)secs.push(`<section><p class="eb">Tus planes</p><div class="card">${P.packages.map(p=>`<div class="ln"><span>${esc(p.name)}</span><small>${p.sessions-p.used} de ${p.sessions} sesiones disponibles</small></div><div class="prog"><span style="width:${p.used/p.sessions*100}%"></span></div>`).join('')}${P.membership?`<div class="ln"><span>${esc(P.membership.name)}<br><small>${esc(P.membership.perks)}</small></span><small>${P.membership.usedThisMonth?'Facial del mes usado':'Facial del mes disponible'}</small></div>`:''}</div></section>`);
   if(P.photos.length)secs.push(`<section><p class="eb">Tu progreso</p><div class="card"><div class="photos">${P.photos.map(f=>`<figure><img src="${esc(f.src)}" alt="Foto ${esc(f.kind)}" loading="lazy"><figcaption>${esc(f.kind)} · ${f.date?shortDate(f.date):''}</figcaption></figure>`).join('')}</div></div></section>`);
   if(P.history.length)secs.push(`<section><p class="eb">Tu historial</p><div class="card">${P.history.map(h=>`<div class="ln"><span>${esc(h.serviceName)}</span><small>${shortDate(h.date)}</small></div>`).join('')}</div></section>`);
   secs.push(`<section><div class="acts"><a class="btn btn--wide" href="/reservar">Reservar otro servicio</a><a class="btn btn--ghost btn--wide" href="${wa('Hola María Teresa, ')}">Escribir a María por WhatsApp</a></div></section>`);
-  secs.push(`<p class="foot">Este enlace es solo tuyo. No lo compartas.<br>MT Aesthetics · The Parlour · New York</p>`);
+  secs.push(`<p class="foot">Este enlace es solo tuyo. No lo compartas.<br>mt aesthetics · New York</p>`);
   $('#app').innerHTML=secs.join('');
 }
 function ics(b){const[y,m,d]=b.date.split('-');const[h,mi]=b.start.split(':');const st=new Date(+y,m-1,+d,+h,+mi),en=new Date(st.getTime()+b.dur*6e4);

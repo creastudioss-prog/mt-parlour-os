@@ -73,16 +73,20 @@ function serveFile(res, file, cache = 'public, max-age=86400') {
   });
 }
 const loginPage = (err = '') => `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MT Parlour · Entrar</title><meta name="theme-color" content="#1F2D24"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<title>mt aesthetics · Entrar</title><meta name="theme-color" content="#1F2D24"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MT Parlour">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Hanken+Grotesk:wght@400;500;600&display=swap">
-<style>:root{color-scheme:light}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F4EFE6;color:#1A1A1A;font:15px 'Hanken Grotesk',system-ui,sans-serif;padding:16px;box-sizing:border-box}
-form{width:min(340px,100%);display:grid;gap:14px;text-align:center}.mk{font-family:Fraunces,serif;font-size:40px;line-height:.9}.mk b{font-weight:480;display:block}.mk span{font-weight:380;letter-spacing:.06em;font-size:.5em}
-em{font-family:Fraunces,serif;color:#8F6446}input{font:inherit;font-size:18px;padding:13px 14px;border:1px solid rgba(26,26,26,.3);border-radius:6px;background:#FBF8F3;text-align:center}
-button{font:inherit;font-weight:600;padding:14px;border:0;border-radius:999px;background:#8F6446;color:#fff;cursor:pointer}.e{color:#9B3B2E;font-size:13px}</style></head>
-<body><form method="post" action="/login"><div class="mk"><b>MT</b><span>AESTHETICS</span></div><em>Parlour OS</em>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=synonym@400,500&display=swap">
+<style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;grid-template-columns:1fr;background:#F4EFE6;color:#1F2D24;font:15px 'Synonym',system-ui,sans-serif}
+@media(min-width:861px){body{grid-template-columns:1fr 1fr}.side{display:flex!important}}
+.side{display:none;background:#1F2D24;align-items:center;justify-content:center}.side img{width:46%;max-width:300px;opacity:.9}
+main{display:grid;place-items:center;padding:24px}form{width:min(340px,100%);display:grid;gap:14px;text-align:center}
+.logo{height:26px;margin:0 auto 6px}p{margin:0 0 10px;color:#5A6359;font-size:14px}
+input{font:inherit;font-size:17px;padding:13px 14px;border:1px solid rgba(31,45,36,.25);border-radius:3px;background:#FAF7F1;text-align:center;color:#1F2D24}
+input:focus{outline:none;border-color:#1F2D24}
+button{font:inherit;font-size:15px;letter-spacing:.02em;padding:15px;border:0;border-radius:3px;background:#1F2D24;color:#F4EFE6;cursor:pointer}.e{color:#9B3B2E;font-size:13px}</style></head>
+<body><div class="side"><img src="/pub/silueta-crema.svg" alt=""></div><main><form method="post" action="/login"><img class="logo" src="/pub/nombre-verde.svg" alt="mt aesthetics"><p>Escribe tu contraseña para entrar</p>
 <input type="password" name="password" placeholder="Contraseña" autocomplete="current-password" autofocus required aria-label="Contraseña">
-${err ? `<div class="e">${err}</div>` : ''}<button type="submit">Entrar</button></form></body></html>`;
+${err ? `<div class="e">${err}</div>` : ''}<button type="submit">Entrar</button></form></main></body></html>`;
 
 /* ---------- AI (opcional) ---------- */
 async function askClaude(input, tier) {

@@ -2,7 +2,7 @@
 <meta name="theme-color" content="#1F2D24"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MT Parlour"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-</head><body><title>MT Parlour Reservas</title>
+</head><body><title>mt aesthetics · Parlour OS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&display=swap">
@@ -663,6 +663,15 @@ a.btn{text-decoration:none!important;color:var(--euca)}
 .r-phone__s{position:relative;width:340px;height:704px;margin:0 auto;background:#15211A;border-radius:44px;padding:12px;box-shadow:0 30px 60px rgba(21,33,26,.18)}
 .r-phone__notch{position:absolute;top:22px;left:50%;width:92px;height:24px;margin-left:-46px;background:#15211A;border-radius:14px;z-index:2}
 .r-phone__s iframe{display:block;width:395px;height:850px;border:0;border-radius:38px;background:var(--cream);transform:scale(.8);transform-origin:0 0}
+
+/* sin mayúsculas espaciadas: etiquetas en gris normal, como en Hoy */
+.eyebrow,.field label,.lbl,.panel__h h3,.t th,.kpi span,.stephead .eyebrow{text-transform:none!important;letter-spacing:.01em!important;font-size:13px!important;font-weight:400!important;font-family:var(--sans)!important;color:var(--muted)}
+.chip{text-transform:none!important;letter-spacing:0!important;font-weight:500!important;font-size:12px!important}
+.mhead h1,.mhead h2{font-family:var(--display);font-weight:300!important;font-variation-settings:"SOFT" 100,"WONK" 0}
+.inp,select.inp,textarea.inp{border-radius:3px!important}
+.dlg__p,.sheet__p,.more__p{border-radius:6px!important}
+@media (max-width:860px){.ag__title{font-size:18px}}
+.wk__hd.today b,.dh.today b,[class*=today] b{border-radius:3px!important}
 </style>
 
 <header class="bar">
@@ -803,7 +812,7 @@ const SOURCES=['web','Instagram','Facebook','Google','Referida','WhatsApp','Pana
 const DEFAULT_SETTINGS={deposit:25,monthlyGoal:6000,taxRate:0.08875,fullPayAfterNoShows:2,refundHours:24,
   referral:{giver:15,receiver:10},staff:[{id:'mt',name:'María Teresa',commission:0,role:'Dueña'}],
   channels:{email:'simulado',sms:'pendiente A2P',whatsapp:'en espera',pana:'simulado',meta:'simulado',google:'simulado',stripe:'simulado',quickbooks:'pendiente'},
-  templates:[{t:'Precios',m:'¡Hola! Nuestros precios van desde $85 el facial. Cada ritual se confirma en consulta de piel. Reserva aquí: mtaesthetics.org/reservas'},
+  templates:[{t:'Precios',m:'¡Hola! Nuestros precios van desde $85 el facial. Cada servicio se confirma en tu consulta de piel. Reserva aquí: mtaesthetics.org/reservas'},
     {t:'Horario',m:'Atendemos de lunes a sábado de 10am a 6pm y domingos de 10am a 2pm, solo con cita. Una clienta a la vez. Reserva en mtaesthetics.org/reservas'},
     {t:'Ubicación',m:'Estamos en New York. Te enviamos la dirección exacta al confirmar tu cita.'},
     {t:'Gracias',m:'¡Gracias por tus palabras! Nos alegra muchísimo. Te esperamos pronto en el parlour 🤍'}],
@@ -951,7 +960,7 @@ function renderWeb(){
     ${C.err?`<p class="err">${esc(C.err)}</p>`:''}<button class="btn btn--pri btn--block" type="submit">Anotarme</button></form>`;
     el.classList.remove('wide');el.innerHTML=h;return}
   if(C.step===1){const list=SERVICES.filter(s=>s.cat===C.cat),con=SVC.consulta;
-    h=`<p class="simbar"><i>Simulación</i> Precios, duraciones y pagos de ejemplo.</p>${steps(1)}<div class="stephead"><span class="eyebrow">Paso 1 · Ritual</span><h1>¿Qué te hacemos hoy?</h1><p class="muted">Una clienta a la vez. Toda visita empieza con una lectura de piel.</p></div>
+    h=`<p class="simbar"><i>Simulación</i> Precios, duraciones y pagos de ejemplo.</p>${steps(1)}<div class="stephead"><span class="eyebrow">Paso 1 · Servicio</span><h1>¿Qué te hacemos hoy?</h1><p class="muted">Una clienta a la vez. Toda visita empieza con una lectura de piel.</p></div>
     <button class="svc svc--consult" data-svc="consulta"><span class="svc__n">${con.name}</span><span class="svc__p">Sin costo<small>se aplica el depósito</small></span><span class="svc__m">¿No sabes qué necesitas? Empieza aquí · ${con.dur} min</span></button>
     <div class="cats" role="group" aria-label="Categorías">${CATS.map(c=>`<button data-cat="${esc(c)}" aria-pressed="${c===C.cat}">${esc(c)}</button>`).join('')}</div>
     <div class="svc-list">${list.map(s=>`<button class="svc" data-svc="${s.id}"><span class="svc__n">${esc(s.name)}</span><span class="svc__p num">desde ${money(s.price)}<small>${s.dur} min</small></span>${needsConsent(s.id)?'<span class="svc__m">Requiere consentimiento firmado</span>':''}</button>`).join('')}</div>`}
@@ -966,12 +975,12 @@ function renderWeb(){
     const sl=slotsFor(C.date,s.dur);
     const I={clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',card:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/>',pin:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'};
     const ic=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[k]}</svg>`;
-    h=`${steps(2)}<button class="back" data-go="1">← Cambiar ritual</button>
+    h=`${steps(2)}<button class="back" data-go="1">← Cambiar servicio</button>
     <div class="bk">
-      <div class="bk__info"><span class="eyebrow">MT Aesthetics · The Parlour</span><h2>${esc(s.name)}</h2>
+      <div class="bk__info"><span class="eyebrow">mt aesthetics</span><h2>${esc(s.name)}</h2>
         <div class="bk__meta"><span>${ic('clock')}${s.dur} min</span>${s.price?`<span>${ic('tag')}desde ${money(s.price)}</span>`:''}<span>${ic('card')}Depósito ${money(SET().deposit)} para apartar</span><span>${ic('pin')}New York · una clienta a la vez</span></div>
         <p class="small muted">Toda visita empieza con una lectura de piel y termina con un té.</p>
-        ${needsConsent(s.id)?'<p class="small muted">Este ritual requiere firmar un consentimiento al reservar.</p>':''}
+        ${needsConsent(s.id)?'<p class="small muted">Este servicio requiere firmar un consentimiento al reservar.</p>':''}
         <button class="back" data-wl="1">¿No ves un horario que te sirva? Lista de espera →</button></div>
       <div class="bk__cal"><h3 style="font-family:var(--sans);font-size:17px;font-weight:600">Escoge el día</h3>
         <div class="mcal__h"><b>${MONL[mm-1]} ${yy}</b><div class="mcal__nav"><button data-mon="-1" aria-label="Mes anterior" ${C.month<=minM?'disabled':''}>‹</button><button data-mon="1" aria-label="Mes siguiente" ${C.month>=maxM?'disabled':''}>›</button></div></div>
@@ -985,7 +994,7 @@ function renderWeb(){
     C.contra=contraFor(s.id,f.flags);
     const ex=findClient(f.phone,f.email);const full=needsFullPay(ex);
     h=`${steps(3)}<button class="back" data-go="2">← Cambiar horario</button><div class="stephead"><span class="eyebrow">Paso 3 · Tus datos y tu piel</span><h1>Cuéntanos de ti</h1></div>
-    <dl class="summary"><div><dt>Ritual</dt><dd>${esc(s.name)}</dd></div><div><dt>Cuándo</dt><dd>${esc(longDate(C.date))} · ${hm12(toMin(C.time))}</dd></div></dl>
+    <dl class="summary"><div><dt>Servicio</dt><dd>${esc(s.name)}</dd></div><div><dt>Cuándo</dt><dd>${esc(longDate(C.date))} · ${hm12(toMin(C.time))}</dd></div></dl>
     <form class="form" id="cform" novalidate>
       <div class="field"><label for="f-name">Nombre completo</label><input class="inp" id="f-name" autocomplete="name" value="${esc(f.name)}"></div>
       <div class="row2"><div class="field"><label for="f-phone">Teléfono</label><input class="inp" id="f-phone" type="tel" autocomplete="tel" value="${esc(f.phone)}"></div>
@@ -1002,7 +1011,7 @@ function renderWeb(){
   else {const b=byId('bookings',C.bookingId)||C._last,s=SVC[C.svc];
     h=`${steps(4)}<div class="done"><div class="seal">✓</div><span class="eyebrow">Cita confirmada</span><h1>Te esperamos, ${esc(first(b?.client?.name))}.</h1>
     <p class="muted">Te enviamos la confirmación a ${esc(b?.client?.email||'tu email')}. Recibirás un recordatorio 24 horas y 2 horas antes.</p></div>
-    <dl class="summary"><div><dt>Ritual</dt><dd>${esc(s.name)}</dd></div><div><dt>Cuándo</dt><dd>${esc(longDate(C.date))} · ${hm12(toMin(C.time))}</dd></div><div><dt>Pagado</dt><dd class="num">${money(b?.deposit||SET().deposit)}</dd></div>${b?.consentId?'<div><dt>Consentimiento</dt><dd>Firmado</dd></div>':''}<div><dt>Dónde</dt><dd>The Parlour · New York</dd></div></dl>
+    <dl class="summary"><div><dt>Servicio</dt><dd>${esc(s.name)}</dd></div><div><dt>Cuándo</dt><dd>${esc(longDate(C.date))} · ${hm12(toMin(C.time))}</dd></div><div><dt>Pagado</dt><dd class="num">${money(b?.deposit||SET().deposit)}</dd></div>${b?.consentId?'<div><dt>Consentimiento</dt><dd>Firmado</dd></div>':''}<div><dt>Dónde</dt><dd>The Parlour · New York</dd></div></dl>
     <p class="policy">Comparte tu código con amigas: ellas reciben ${money(SET().referral.receiver)} de descuento y tú ${money(SET().referral.giver)} de crédito. Tu código: <b>${esc(refCode(byId('clients',b?.clientId)))}</b></p>
     <button class="btn btn--block" data-restart>Hacer otra reserva</button>`}
   el.classList.toggle('wide',C.step===2&&!C.wl);el.innerHTML=h;
@@ -1066,7 +1075,7 @@ function openPay({amount,title,desc,hold,tip,onPaid}){const sh=$('sheet');let ti
   const draw=()=>{const tipAmt=r2(amount*tipPct/100),tot=r2(amount+tipAmt);
   sh.innerHTML=`<div class="sheet__p" role="dialog" aria-modal="true" aria-label="Pago">
     <div class="sheet__top"><span><b>stripe</b> · checkout simulado</span><button class="sheet__x" data-x aria-label="Cerrar">×</button></div>
-    <div><div class="sheet__desc">MT Aesthetics · The Parlour</div><div class="sheet__amt num">${money(tot)}</div><div class="sheet__desc">${esc(title)}<br>${esc(desc)}</div></div>
+    <div><div class="sheet__desc">mt aesthetics</div><div class="sheet__amt num">${money(tot)}</div><div class="sheet__desc">${esc(title)}<br>${esc(desc)}</div></div>
     ${hold?`<div class="hold">Tu horario queda apartado ${HOLD_MIN} minutos mientras pagas.</div>`:''}
     ${tip?`<div><div class="sheet__desc" style="margin-bottom:6px">¿Agregar propina?</div><div class="tiprow">${[0,15,18,20].map(p=>`<button data-tip="${p}" aria-pressed="${p===tipPct}">${p?p+'%':'No'}</button>`).join('')}</div>${tipPct?`<div class="sheet__desc" style="margin-top:4px">Propina ${money(tipAmt)}</div>`:''}</div>`:''}
     <button class="pay-apple" data-m="Apple Pay"> Pagar con Apple Pay</button><button class="pay-google" data-m="Google Pay">Pagar con Google Pay</button>
@@ -1522,7 +1531,7 @@ function segment(key){const t=today();return D.clients.filter(c=>{const s=client
 RENDER.clientas=()=>{
   const q=OS.cliQ.toLowerCase();
   const list=segment(OS.cliSeg).filter(c=>!q||[c.name,c.phone,c.email,c.ig,refCode(c)].join(' ').toLowerCase().includes(q)).map(c=>({c,s:clientStats(c.id)})).sort((a,b)=>(b.s.last||isoDay(b.c.createdAt)||'').localeCompare(a.s.last||isoDay(a.c.createdAt)||''));
-  return `<div class="mhead"><div><span class="eyebrow">CRM</span><h1>Clientas</h1></div><div class="mhead__a"><button class="btn btn--pri" data-x="newclient">+ Clienta</button></div></div>
+  return `<div class="mhead"><div><span class="eyebrow">Tus clientas</span><h1>Clientas</h1></div><div class="mhead__a"><button class="btn btn--pri" data-x="newclient">+ Clienta</button></div></div>
   <div class="panel"><div class="panel__h"><div class="tabs" role="group">${Object.entries(SEGS).map(([k,l])=>`<button data-seg="${k}" aria-pressed="${OS.cliSeg===k}">${l} <span class="muted">${segment(k).length}</span></button>`).join('')}</div>
     <input class="inp" id="cli-q" type="search" placeholder="Buscar nombre, teléfono, @ o código" value="${esc(OS.cliQ)}" style="max-width:260px"></div>
     ${list.length?`<div class="tw"><table class="t"><thead><tr><th>Clienta</th><th>Visitas</th>${isOwnerView()?'<th class="r">Gastado</th>':''}<th>Última</th><th>Próxima</th><th>Origen</th><th>Salud</th></tr></thead><tbody>
@@ -2065,7 +2074,7 @@ const timeOptions=sel=>{let o='';for(let t=OPEN;t<=CLOSE;t+=STEP)o+=`<option val
 function openManual(cid,opt={}){const c=cid?byId('clients',cid):null;const w=opt.wl;const st=SET();
   dialog(`<div class="dlg__h"><h2>Nueva cita</h2><button type="button" data-close aria-label="Cerrar">×</button></div>
     <p class="muted small">${w?'Desde la lista de espera.':'Para citas que llegan por WhatsApp, Instagram, teléfono, Pana o en persona.'}</p>
-    <div class="field"><label for="m-svc">Ritual</label><select class="inp" id="m-svc">${SERVICES.map(s=>`<option value="${s.id}" ${w?.serviceId===s.id?'selected':''}>${esc(svcLabel(s))} · ${s.dur} min</option>`).join('')}</select></div>
+    <div class="field"><label for="m-svc">Servicio</label><select class="inp" id="m-svc">${SERVICES.map(s=>`<option value="${s.id}" ${w?.serviceId===s.id?'selected':''}>${esc(svcLabel(s))} · ${s.dur} min</option>`).join('')}</select></div>
     <div class="row2"><div class="field"><label for="m-date">Día</label><input class="inp" id="m-date" type="date" value="${opt.date||w?.date||(OS.day>=today()?OS.day:today())}"></div><div class="field"><label for="m-time">Hora</label><select class="inp" id="m-time">${timeOptions(opt.time||'10:00')}</select></div></div>
     <div class="row2"><div class="field"><label for="m-name">Nombre</label><input class="inp" id="m-name" value="${esc(c?.name||w?.name||'')}" list="m-cl"><datalist id="m-cl">${D.clients.map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist></div>
     <div class="field"><label for="m-phone">Teléfono</label><input class="inp" id="m-phone" type="tel" value="${esc(c?.phone||w?.phone||'')}"></div></div>
@@ -2075,7 +2084,7 @@ function openManual(cid,opt={}){const c=cid?byId('clients',cid):null;const w=opt
     async()=>{const s=SVC[$('m-svc').value],date=$('m-date').value,start=$('m-time').value,name=$('m-name').value.trim(),err=$('m-err');
       const fail=m=>{err.textContent=m;err.hidden=false;return false};
       if(!date||!name)return fail('Falta el día o el nombre.');const HH=HOURS[parseYmd(date).getDay()];if(!HH)return fail('Ese día el parlour está cerrado.');
-      const t=toMin(start);if(t<HH[0]||t+s.dur>HH[1])return fail('Ese ritual no cabe en el horario de ese día ('+hm12(HH[0])+' a '+hm12(HH[1])+').');
+      const t=toMin(start);if(t<HH[0]||t+s.dur>HH[1])return fail('Ese servicio no cabe en el horario de ese día ('+hm12(HH[0])+' a '+hm12(HH[1])+').');
       if(busyOn(date).some(([a,b])=>t<b&&t+s.dur>a))return fail('Ese horario choca con otra cita o un bloqueo.');
       const ex=D.clients.find(x=>x.name.toLowerCase()===name.toLowerCase())||findClient($('m-phone').value);
       if(ex){const cf=contraFor(s.id,ex.flags);if(cf.block.length)return fail(`Contraindicación: ${ex.name} marcó “${cf.block[0].f}”. ${cf.block[0].why}.`)}
