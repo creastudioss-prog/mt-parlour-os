@@ -23,8 +23,25 @@ fs.mkdirSync(DATA_DIR, { recursive: true });
 let store = { rev: 1, data: {} };
 try {
   if (fs.existsSync(DB_FILE)) store = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
-  else if (fs.existsSync(path.join(__dirname, 'seed.json'))) store = { rev: 1, data: JSON.parse(fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8')) };
+  else if (process.env.DEMO === '1' && fs.existsSync(path.join(__dirname, 'seed.json'))) store = { rev: 1, data: JSON.parse(fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8')) };
 } catch (e) { console.error('No se pudo leer la base de datos:', e); }
+// Limpieza única de los datos de ejemplo: borra solo los registros cuyo código viene de seed.json.
+// Antes guarda una copia completa en DATA_DIR. La configuración (settings) no se toca.
+try {
+  const meta = store.data._meta = store.data._meta || {};
+  if (!meta.demoCleared && process.env.DEMO !== '1' && fs.existsSync(path.join(__dirname, 'seed.json'))) {
+    const seed = JSON.parse(fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8'));
+    fs.writeFileSync(path.join(DATA_DIR, 'db-antes-de-limpiar-ejemplos.json'), JSON.stringify(store));
+    let n = 0;
+    for (const [c, recs] of Object.entries(seed)) {
+      if (c === 'settings' || !store.data[c] || typeof recs !== 'object') continue;
+      for (const id of Object.keys(recs)) if (store.data[c][id]) { delete store.data[c][id]; n++; }
+    }
+    meta.demoCleared = new Date().toISOString(); store.rev++;
+    fs.writeFileSync(DB_FILE, JSON.stringify(store));
+    console.log('Datos de ejemplo borrados:', n);
+  }
+} catch (e) { console.error('No se pudieron limpiar los ejemplos:', e); }
 let saveT = null;
 function save() {
   clearTimeout(saveT);
@@ -37,6 +54,8 @@ function save() {
   }, 250);
 }
 save();
+// al reiniciar (Railway manda SIGTERM en cada publicación) se guarda todo antes de salir
+for (const sig of ['SIGTERM', 'SIGINT']) process.on(sig, () => { try { clearTimeout(saveT); fs.writeFileSync(DB_FILE, JSON.stringify(store)); } catch (e) { console.error(e); } process.exit(0); });
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
 const merge = (a, b) => { const o = { ...(a || {}) }; for (const k in b) o[k] = isObj(b[k]) && isObj(o[k]) ? merge(o[k], b[k]) : b[k]; return o; };
 const okName = s => typeof s === 'string' && /^[A-Za-z0-9_\-.~:@+]{1,200}$/.test(s);
@@ -152,7 +171,10 @@ http.createServer(async (req, res) => {
       if (op !== 'delete' && !isObj(data)) return send(res, 400, { error: 'bad_request' });
       store.data[c] = store.data[c] || {};
       if (op === 'set') store.data[c][id] = data;
+      const before = c === 'bookings' && store.data[c][id] ? { ...store.data[c][id] } : null;
       if (op === 'update') store.data[c][id] = merge(store.data[c][id], data);
+      if (before && store.data[c][id] && store.data[c][id].depositRefunded && !before.depositRefunded && store.data[c][id].stripePaymentIntent && !store.data[c][id].stripeRefundId)
+        publicApi.refundDeposit(id).catch(e => console.error('Reembolso', e.message));
       if (op === 'delete') delete store.data[c][id];
       store.rev++; save();
       return send(res, 200, { rev: store.rev });

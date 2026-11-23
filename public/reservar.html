@@ -67,6 +67,9 @@ textarea.inp{min-height:70px;resize:vertical}
 .sum p{margin:2px 0 0;font-size:14px;color:var(--gris)}
 .err{background:#F3E2DC;color:#7A2E1F;padding:12px 14px;margin:18px 0 0;font-size:14px}
 .warn{background:var(--oat);padding:12px 14px;margin:18px 0 0;font-size:14px}
+.pol{background:var(--oat);padding:18px 18px 16px;margin:6px 0 14px;font-size:14px;line-height:1.55}
+.pol b{display:block;font-family:var(--serif,Georgia),serif;font-weight:400;font-size:19px;margin-bottom:8px}
+.pol ul{margin:0;padding-left:18px}.pol li{margin:4px 0}
 .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(244,239,230,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom))}
 .bar div{max-width:600px;margin:0 auto;display:flex;gap:8px}
 .btn{flex:1;border:0;border-radius:2px;padding:16px 20px;font-size:14px;letter-spacing:.04em;cursor:pointer;background:var(--euc);color:var(--cream);text-align:center;text-decoration:none;display:inline-block;transition:background .2s}
@@ -128,6 +131,17 @@ async function init(){
   try{CAT=await api('/api/public/catalog')}catch(e){$('#app').innerHTML='<p class="empty">No pudimos cargar los servicios. Escríbenos por <a class="wa" href="https://wa.me/13474795229">WhatsApp</a>.</p>';return}
   if(CAT.open===false){$('#app').innerHTML='<h1>Volvemos pronto.</h1><p class="lede">Las reservas en línea están en pausa por ahora. Escríbele a María y te agenda.</p><p style="text-align:center"><a class="btn" style="display:inline-block;max-width:320px" href="https://wa.me/13474795229" target="_top">Escribir por WhatsApp</a></p>';return}
   S.cat=CAT.cats[0];
+  if(Q.get('pago')==='ok'&&Q.get('b')&&Q.get('s')){
+    $('#app').innerHTML='<p class="empty">Confirmando tu pago…</p>';
+    try{const r=await api('/api/public/pago?b='+encodeURIComponent(Q.get('b'))+'&s='+encodeURIComponent(Q.get('s')));
+      r.paid=true;S.res=r;S.svc={name:r.booking.serviceName,dur:r.booking.dur};S.date=r.booking.date;S.time=r.booking.start;S.step=4;
+      try{localStorage.setItem('mt-portal',r.portal)}catch(e){}history.replaceState(null,'','/reservar');render();return}
+    catch(e){$('#app').innerHTML='<h1>No pudimos confirmar tu pago.</h1><p class="lede">'+esc(e.message)+' Si se te cobró, escríbele a María y lo resuelve enseguida.</p><p style="text-align:center"><a class="btn" style="display:inline-block;max-width:320px" href="https://wa.me/13474795229">Escribir por WhatsApp</a></p>';return}
+  }
+  if(Q.get('pago')==='cancelado'&&Q.get('b')){
+    try{await api('/api/public/liberar',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({b:Q.get('b'),k:Q.get('k')||''})})}catch(e){}
+    S.notice='No se completó el pago, así que tu hora no quedó apartada. Puedes intentarlo de nuevo.';history.replaceState(null,'','/reservar');
+  }
   const q=Q.get('servicio');if(q&&CAT.services.find(s=>s.id===q)){S.svc=CAT.services.find(s=>s.id===q);S.cat=S.svc.cat}else if(q&&CATQ[q]&&CAT.cats.includes(CATQ[q])){S.cat=CATQ[q]}
   render();
 }
@@ -138,7 +152,7 @@ function render(){
   if(S.step===1){
     const cats=[...CAT.cats,'Consulta'];
     const list=CAT.services.filter(s=>s.cat===S.cat);
-    a.innerHTML=steps()+`<h1>¿Qué te gustaría?</h1><p class="lede">Una clienta a la vez. Todo se confirma en tu consulta de piel.</p>
+    a.innerHTML=steps()+`${S.notice?`<div class="warn" role="status" style="margin:0 0 18px">${esc(S.notice)}</div>`:''}<h1>¿Qué te gustaría?</h1><p class="lede">Una clienta a la vez. Todo se confirma en tu consulta de piel.</p>
     <div class="tabs" role="group" aria-label="Categorías">${cats.map(c=>`<button class="tab" data-cat="${esc(c)}" aria-pressed="${c===S.cat}">${esc(c==='Consulta'?'Consulta de piel':NAME(c))}</button>`).join('')}</div>
     <div class="list">${list.map(s=>`<button class="svc" data-svc="${s.id}" aria-pressed="${S.svc&&S.svc.id===s.id}"><span><b>${esc(s.name)}</b><small>${s.dur} min</small></span><span class="pr">${s.priceFrom?'desde $'+s.priceFrom:'sin costo'}</span></button>`).join('')}</div>
     <p class="foot">¿Primera vez o tienes dudas? Escríbele a María por <a href="https://wa.me/13474795229?text=${encodeURIComponent('Hola María Teresa, quiero información para reservar.')}">WhatsApp</a>.</p>`;
@@ -169,15 +183,21 @@ function render(){
       <label class="lbl" for="f-note">¿Algo que María deba saber? (opcional)</label><textarea class="inp" id="f-note">${esc(f.note)}</textarea>
       <div class="hp" aria-hidden="true"><label>Sitio web <input id="f-web" tabindex="-1" autocomplete="off"></label></div>
       <span class="lbl">Política de citas</span>
-      <label class="chk"><input type="checkbox" id="f-agree" ${f.agree?'checked':''}> Entiendo que puedo cambiar o cancelar mi cita hasta ${CAT.policy.refundHours} horas antes desde mi app${CAT.payments?`, y que el depósito de $${CAT.policy.deposit} se descuenta del total`:''}.</label>
+      ${CAT.payments?`<div class="pol"><b>Depósito de $${CAT.policy.deposit}</b><ul>
+        <li>Aparta tu hora y se descuenta del total de tu servicio el día de tu cita.</li>
+        <li>Puedes cambiar o cancelar gratis hasta ${CAT.policy.refundHours} horas antes desde tu app. Si cancelas a tiempo, te devolvemos el depósito.</li>
+        <li>Si cancelas con menos de ${CAT.policy.refundHours} horas o no llegas, el depósito no se devuelve.</li>
+        <li>Si llegas tarde, tu servicio puede acortarse para no retrasar a la siguiente clienta.</li></ul></div>
+      <label class="chk"><input type="checkbox" id="f-agree" ${f.agree?'checked':''}> Leí y acepto la política de citas y depósito.</label>`
+      :`<label class="chk"><input type="checkbox" id="f-agree" ${f.agree?'checked':''}> Entiendo que puedo cambiar o cancelar mi cita hasta ${CAT.policy.refundHours} horas antes desde mi app.</label>`}
       ${S.err?`<div class="err" role="alert">${esc(S.err)}</div>`:''}
     </form>`;
-    bar(`<button class="btn btn--ghost" id="back">Atrás</button><button class="btn" id="send" ${S.busy?'disabled':''}>${S.busy?'Reservando…':'Reservar'}</button>`);
+    bar(`<button class="btn btn--ghost" id="back">Atrás</button><button class="btn" id="send" ${S.busy?'disabled':''}>${S.busy?(CAT.payments?'Abriendo el pago…':'Reservando…'):(CAT.payments?`Pagar depósito · $${CAT.policy.deposit}`:'Reservar')}</button>`);
   }
   if(S.step===4){
     const r=S.res,abs=location.origin+r.portal;
     a.innerHTML=`<div class="done"><img src="/pub/silueta-verde.svg" alt=""><h1>Tu cita está <em>reservada.</em></h1>
-    <div class="sum" style="text-align:left"><b>${esc(S.svc.name)}</b><p>${longDate(S.date)} · ${h12(S.time)} · ${S.svc.dur} min</p></div>
+    <div class="sum" style="text-align:left"><b>${esc(S.svc.name)}</b><p>${longDate(S.date)} · ${h12(S.time)} · ${S.svc.dur} min</p>${r.paid?`<p>Depósito de $${r.booking.deposit} pagado · se descuenta de tu servicio</p>`:''}</div>
     ${r.warn&&r.warn.length?`<div class="warn">María lo revisará contigo antes de empezar: ${esc(r.warn[0])}.</div>`:''}
     <div class="card"><h2>Tu app del parlour</h2><p>Ahí ves tu cita, la cambias si lo necesitas${r.needsConsent?', firmas tu consentimiento antes de llegar':''} y recibes los cuidados para después. Guárdala en tu pantalla de inicio.</p>
     <div class="stack"><a class="btn" href="${esc(r.portal)}">Abrir mi app</a><button class="btn btn--ghost" id="copy" style="flex:auto">Copiar mi enlace</button></div></div>

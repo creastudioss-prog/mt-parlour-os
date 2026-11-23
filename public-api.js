@@ -52,7 +52,66 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
     email: !!process.env.RESEND_API_KEY,
     sms: !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM)
   };
-  async function startDeposit(booking) { /* Stripe Checkout: crear sesión y devolver su URL. Pendiente de conectar. */ return null; }
+  // ---- depósito con Stripe Checkout (sin librerías: API REST) ----
+  const STRIPE = process.env.STRIPE_SECRET_KEY;
+  const HOLD_MIN = 32;   // el turno queda apartado mientras paga; la página de pago vence a los 31 min
+  function form(obj, pre = '', out = []) {
+    for (const [k, v] of Object.entries(obj)) {
+      if (v === undefined || v === null) continue;
+      const key = pre ? `${pre}[${k}]` : k;
+      if (typeof v === 'object') form(v, key, out); else out.push([key, String(v)]);
+    }
+    return out;
+  }
+  async function stripe(p, params, method = 'POST') {
+    const r = await fetch((process.env.STRIPE_API_BASE || 'https://api.stripe.com/v1') + p, {
+      method, headers: { authorization: 'Bearer ' + STRIPE, 'content-type': 'application/x-www-form-urlencoded', 'stripe-version': '2024-06-20' },
+      body: params ? new URLSearchParams(form(params)).toString() : undefined
+    });
+    const j = await r.json();
+    if (!r.ok) { const e = new Error(j.error?.message || 'stripe'); e.stripe = j.error; throw e; }
+    return j;
+  }
+  const baseUrl = req => process.env.PUBLIC_URL || `${(req.headers['x-forwarded-proto'] || 'https').split(',')[0]}://${req.headers['x-forwarded-host'] || req.headers.host}`;
+  const POLICY = S => `Tu depósito de $${S.deposit} aparta tu hora y se descuenta del total de tu servicio. Puedes cambiar o cancelar gratis hasta ${S.refundHours} horas antes desde tu app y te devolvemos el depósito. Si cancelas con menos de ${S.refundHours} horas o no llegas, el depósito no se devuelve.`;
+  async function startDeposit(booking, req) {
+    if (!STRIPE) return null;
+    const S = settings(), base = baseUrl(req);
+    const bk = col('bookings')[booking.id];
+    bk.releaseKey = token();
+    const ses = await stripe('/checkout/sessions', {
+      mode: 'payment', locale: 'es', client_reference_id: booking.id,
+      customer_email: booking.client.email || undefined,
+      line_items: { 0: { quantity: 1, price_data: { currency: 'usd', unit_amount: Math.round(S.deposit * 100),
+        product_data: { name: `Depósito · ${booking.serviceName}`, description: `Se descuenta del total de tu servicio. Cita: ${booking.date} a las ${booking.start}.` } } } },
+      payment_intent_data: { description: `MT Aesthetics · depósito ${booking.serviceName} ${booking.date} ${booking.start}`, metadata: { bookingId: booking.id } },
+      metadata: { bookingId: booking.id },
+      custom_text: { submit: { message: POLICY(S) } },
+      expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
+      success_url: `${base}/reservar?pago=ok&b=${booking.id}&s={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${base}/reservar?pago=cancelado&b=${booking.id}&k=${bk.releaseKey}`
+    });
+    bk.stripeSession = ses.id; commit();
+    return ses.url;
+  }
+  function markPaid(bid, pi, via) {
+    const bk = col('bookings')[bid]; if (!bk || bk.depositPaid) return bk;
+    bk.depositPaid = true; bk.depositMethod = 'tarjeta (Stripe)'; bk.depositPaidAt = new Date().toISOString(); bk.stripePaymentIntent = pi;
+    if (['hold', 'expired'].includes(bk.status)) bk.status = 'confirmed';
+    bk.holdUntil = null;
+    bk.log = [...(bk.log || []), { at: new Date().toISOString(), by: 'web', text: `Depósito de $${bk.deposit} pagado en línea (${via})` }];
+    commit(); notify('confirmed', col('clients')[bk.clientId], bk);
+    return bk;
+  }
+  async function refundDeposit(bid) {
+    const bk = col('bookings')[bid];
+    if (!STRIPE || !bk || !bk.stripePaymentIntent || bk.stripeRefundId) return;
+    try {
+      const r = await stripe('/refunds', { payment_intent: bk.stripePaymentIntent, metadata: { bookingId: bid } });
+      bk.stripeRefundId = r.id; bk.depositRefunded = true; bk.depositRefundedAt = new Date().toISOString(); bk.refundPending = false;
+    } catch (e) { bk.refundPending = true; console.error('No se pudo devolver el depósito', bid, e.message); }
+    commit();
+  }
   async function notify(kind, client, booking) { /* Correo (Resend) y SMS (Twilio). Pendiente de conectar; hoy solo queda registrado. */
     console.log('[aviso]', kind, client?.name, booking?.date, booking?.start, integrations);
   }
@@ -142,7 +201,7 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
   }
 
   // ---- rutas ----
-  return async function handle(req, res, url) {
+  const handler = async function handle(req, res, url) {
     const p = url.pathname;
 
     if (p === '/reservar' || p === '/reservar/') return send(res, 200, fs.readFileSync(path.join(PUB, 'reservar.html')), 'text/html; charset=utf-8');
@@ -164,6 +223,38 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
       const s = cat.SVC[url.searchParams.get('service')], date = url.searchParams.get('date') || '';
       if (!s || !isDate(date)) return send(res, 400, { error: 'bad_request' });
       return send(res, 200, { date, slots: slots(date, s.dur) });
+    }
+    if (p === '/api/public/pago' && req.method === 'GET') {   // vuelta desde Stripe
+      if (limited(req, 'pago', 30, 10)) return send(res, 429, { error: 'Demasiadas solicitudes.' });
+      const bid = url.searchParams.get('b') || '', sid = url.searchParams.get('s') || '';
+      const bk = col('bookings')[bid];
+      if (!bk || !STRIPE || !/^cs_/.test(sid) || bk.stripeSession !== sid) return send(res, 404, { error: 'No encontramos ese pago.' });
+      if (!bk.depositPaid) {
+        let ses; try { ses = await stripe('/checkout/sessions/' + sid, null, 'GET'); } catch (e) { return send(res, 502, { error: 'No pudimos confirmar el pago. Escríbenos por WhatsApp.' }); }
+        if (ses.payment_status !== 'paid' || ses.metadata?.bookingId !== bid) return send(res, 409, { error: 'El pago no se completó.' });
+        markPaid(bid, ses.payment_intent, 'vuelta del pago');
+      }
+      const tk = ensureToken(bk.clientId); commit();
+      return send(res, 200, { ok: true, bookingId: bid, status: bk.status, portal: `/c/${tk}`, needsConsent: cat.needsConsent(bk.serviceId), warn: [],
+        booking: { serviceName: bk.serviceName, dur: bk.dur, date: bk.date, start: bk.start, deposit: bk.deposit } });
+    }
+    if (p === '/api/public/liberar' && req.method === 'POST') {   // volvió sin pagar: suelta el turno
+      let b; try { b = JSON.parse(await readBody(req, 2000)); } catch { return send(res, 400, { error: 'bad_request' }); }
+      const bk = col('bookings')[b.b];
+      if (bk && bk.status === 'hold' && !bk.depositPaid && bk.releaseKey && typeof b.k === 'string' && b.k.length === bk.releaseKey.length && crypto.timingSafeEqual(Buffer.from(b.k), Buffer.from(bk.releaseKey))) {
+        bk.status = 'expired'; bk.holdUntil = new Date().toISOString(); skipReminders(b.b); commit();
+      }
+      return send(res, 200, { ok: true });
+    }
+    if (p === '/api/stripe/webhook' && req.method === 'POST') {
+      const raw = await readBody(req, 200000), secret = process.env.STRIPE_WEBHOOK_SECRET;
+      if (!secret) return send(res, 400, { error: 'sin secreto' });
+      const sig = Object.fromEntries(String(req.headers['stripe-signature'] || '').split(',').map(x => x.split('=')));
+      const exp = crypto.createHmac('sha256', secret).update(`${sig.t}.${raw}`).digest('hex');
+      if (!sig.v1 || sig.v1.length !== exp.length || !crypto.timingSafeEqual(Buffer.from(sig.v1), Buffer.from(exp)) || Math.abs(Date.now() / 1000 - +sig.t) > 600) return send(res, 400, { error: 'firma' });
+      const ev = JSON.parse(raw), o = ev.data?.object || {};
+      if (ev.type === 'checkout.session.completed' && o.payment_status === 'paid' && o.metadata?.bookingId && col('bookings')[o.metadata.bookingId]?.stripeSession === o.id) markPaid(o.metadata.bookingId, o.payment_intent, 'aviso de Stripe');
+      return send(res, 200, { received: true });
     }
     if (p === '/api/public/days') {   // qué días tienen horario libre (para pintar el calendario)
       const s = cat.SVC[url.searchParams.get('service')]; if (!s) return send(res, 400, { error: 'bad_request' });
@@ -189,10 +280,12 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
       if (cid) { const c = col('clients')[cid]; if (email && !c.email) c.email = email; if (flags.length) c.flags = [...new Set([...(c.flags || []), ...flags])]; }
       else { cid = 'c-' + uid(); col('clients')[cid] = { name, phone, email, ig: '', birthday: '', skinType: '', flags, notes: '', tags: [], source: 'web', referredBy: '', credit: 0, marketingOk: false, createdAt: new Date().toISOString() }; }
       const tk = ensureToken(cid), S = settings(), bid = 'b-' + uid();
-      const booking = { serviceId: s.id, serviceName: s.name, category: s.cat, dur: s.dur, priceFrom: s.price, date: b.date, start: b.start, clientId: cid, client: { name: col('clients')[cid].name, phone, email }, flags, note: str(b.note, 500), status: integrations.payments ? 'hold' : 'confirmed', holdUntil: integrations.payments ? new Date(Date.now() + 30 * 60e3).toISOString() : null, deposit: S.deposit, depositPaid: false, source: 'web', staffId: 'mt', createdAt: new Date().toISOString() };
+      const booking = { serviceId: s.id, serviceName: s.name, category: s.cat, dur: s.dur, priceFrom: s.price, date: b.date, start: b.start, clientId: cid, client: { name: col('clients')[cid].name, phone, email }, flags, note: str(b.note, 500), status: integrations.payments ? 'hold' : 'confirmed', holdUntil: integrations.payments ? new Date(Date.now() + HOLD_MIN * 60e3).toISOString() : null, deposit: S.deposit, depositPaid: false, source: 'web', staffId: 'mt', createdAt: new Date().toISOString() };
       col('bookings')[bid] = booking; addReminders(bid, booking); commit();
-      const pay = await startDeposit({ id: bid, ...booking });
-      notify('booked', col('clients')[cid], booking);
+      let pay = null;
+      try { pay = await startDeposit({ id: bid, ...booking }, req); }
+      catch (e) { console.error('Stripe', e.message); booking.status = 'expired'; skipReminders(bid); commit(); return send(res, 502, { error: 'No pudimos abrir el pago en este momento. Intenta de nuevo en un minuto o escríbenos por WhatsApp.' }); }
+      if (!pay) notify('booked', col('clients')[cid], booking);
       return send(res, 200, { ok: true, bookingId: bid, status: booking.status, portal: `/c/${tk}`, payUrl: pay, needsConsent: cat.needsConsent(s.id), warn: cf.warn.map(w => w.why) });
     }
 
@@ -210,7 +303,8 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
         if (!mine || !['confirmed', 'hold'].includes(eff(bk))) return send(res, 400, { error: 'No se encontró esa cita.' });
         if (hoursUntil(bk) < (settings().refundHours || 24)) return send(res, 409, { error: `Faltan menos de ${settings().refundHours || 24} horas. Para cancelar, escríbele a María por WhatsApp.` });
         bk.status = 'cancelled'; bk.cancelledAt = new Date().toISOString(); bk.cancelledBy = 'clienta'; skipReminders(body.bookingId); commit(); notify('cancelled', c, bk);
-        return send(res, 200, profile(id, c));
+        if (bk.depositPaid && !bk.depositRefunded) await refundDeposit(body.bookingId);
+        return send(res, 200, { ...profile(id, c), refunded: !!bk.depositRefunded, refundPending: !!bk.refundPending });
       }
       if (action === '/reschedule') {
         if (!mine || !['confirmed', 'hold'].includes(eff(bk))) return send(res, 400, { error: 'No se encontró esa cita.' });
@@ -244,12 +338,18 @@ module.exports = function publicApi({ store, save, send, readBody, PUB }) {
         if (cf.block.length) return send(res, 409, { error: `Este servicio no se puede reservar en línea: ${cf.block[0].why}. Escríbele a María.` });
         if (!slots(body.date, s.dur).includes(body.start)) return send(res, 409, { error: 'Ese horario se acaba de ocupar.' });
         const bid = 'b-' + uid(), S = settings();
-        const booking = { serviceId: s.id, serviceName: s.name, category: s.cat, dur: s.dur, priceFrom: s.price, date: body.date, start: body.start, clientId: id, client: { name: c.name, phone: c.phone, email: c.email }, flags: c.flags || [], note: '', status: integrations.payments ? 'hold' : 'confirmed', holdUntil: integrations.payments ? new Date(Date.now() + 30 * 60e3).toISOString() : null, deposit: S.deposit, depositPaid: false, source: 'app', staffId: 'mt', createdAt: new Date().toISOString() };
-        col('bookings')[bid] = booking; addReminders(bid, booking); commit(); notify('booked', c, booking);
-        return send(res, 200, profile(id, c));
+        const booking = { serviceId: s.id, serviceName: s.name, category: s.cat, dur: s.dur, priceFrom: s.price, date: body.date, start: body.start, clientId: id, client: { name: c.name, phone: c.phone, email: c.email }, flags: c.flags || [], note: '', status: integrations.payments ? 'hold' : 'confirmed', holdUntil: integrations.payments ? new Date(Date.now() + HOLD_MIN * 60e3).toISOString() : null, deposit: S.deposit, depositPaid: false, source: 'app', staffId: 'mt', createdAt: new Date().toISOString() };
+        col('bookings')[bid] = booking; addReminders(bid, booking); commit();
+        let pay = null;
+        try { pay = await startDeposit({ id: bid, ...booking }, req); }
+        catch (e) { console.error('Stripe', e.message); booking.status = 'expired'; skipReminders(bid); commit(); return send(res, 502, { error: 'No pudimos abrir el pago. Intenta de nuevo en un minuto.' }); }
+        if (!pay) notify('booked', c, booking);
+        return send(res, 200, { ...profile(id, c), payUrl: pay });
       }
       return send(res, 404, { error: 'not_found' });
     }
     return null;   // no es una ruta pública
   };
+  handler.refundDeposit = refundDeposit;
+  return handler;
 };
