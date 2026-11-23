@@ -83,7 +83,7 @@ main{display:grid;place-items:center;padding:24px}form{width:min(340px,100%);dis
 .logo{height:26px;margin:0 auto 6px}p{margin:0 0 10px;color:#5A6359;font-size:14px}
 input{font:inherit;font-size:17px;padding:13px 14px;border:1px solid rgba(31,45,36,.25);border-radius:3px;background:#FAF7F1;text-align:center;color:#1F2D24}
 input:focus{outline:none;border-color:#1F2D24}
-button{font:inherit;font-size:15px;letter-spacing:.02em;padding:15px;border:0;border-radius:3px;background:#1F2D24;color:#F4EFE6;cursor:pointer}.e{color:#9B3B2E;font-size:13px}</style></head>
+button{font:inherit;font-size:15px;letter-spacing:.02em;padding:15px;border:0;border-radius:3px;background:#1F2D24;color:#F4EFE6;cursor:pointer}.e{color:#9B3B2E;font-size:13px}body::after{content:"";position:fixed;left:0;right:0;top:-25vh;height:150vh;z-index:9999;pointer-events:none;background:url(/pub/grano.png) repeat;background-size:180px;opacity:.06}</style></head>
 <body><div class="side"><img src="/pub/silueta-crema.svg" alt=""></div><main><form method="post" action="/login"><img class="logo" src="/pub/nombre-verde.svg" alt="mt aesthetics"><p>Escribe tu contraseña para entrar</p>
 <input type="password" name="password" placeholder="Contraseña" autocomplete="current-password" autofocus required aria-label="Contraseña">
 ${err ? `<div class="e">${err}</div>` : ''}<button type="submit">Entrar</button></form></main></body></html>`;
