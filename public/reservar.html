@@ -183,7 +183,7 @@ function render(){
     <div class="stack"><a class="btn" href="${esc(r.portal)}">Abrir mi app</a><button class="btn btn--ghost" id="copy" style="flex:auto">Copiar mi enlace</button></div></div>
     <div class="stack"><a class="btn btn--ghost" style="flex:auto" href="data:text/calendar;charset=utf-8,${encodeURIComponent(ics())}" download="cita-mt-aesthetics.ics">Agregar a mi calendario</a>
     <a class="btn btn--ghost" style="flex:auto" href="https://wa.me/13474795229?text=${encodeURIComponent('Hola María Teresa, acabo de reservar '+S.svc.name+' para el '+longDate(S.date)+' a las '+h12(S.time)+'.')}">Avisar a María por WhatsApp</a></div>
-    <p class="foot">Te enviamos la dirección exacta al confirmar.</p></div>`;
+    <div class="sum" style="text-align:left;margin-top:12px"><b>Dónde</b><p>Phenix Salon Suites · Suite 107<br>171 W 230th St, Bronx, NY 10463</p><p><a href="https://maps.google.com/?q=171+W+230th+St+Suite+107+Bronx+NY+10463" target="_blank" rel="noopener" style="color:inherit">Cómo llegar</a> · tren 1, parada 231 St</p></div></div>`;
     bar('');
     if(Q.get('embed')==='1')a.querySelectorAll('a[href^="/c/"],a[href^="https://wa.me"]').forEach(x=>x.target='_top');
     $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(abs);$('#copy').textContent='Enlace copiado'}catch{prompt('Copia tu enlace:',abs)}};

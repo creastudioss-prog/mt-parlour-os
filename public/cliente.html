@@ -129,7 +129,7 @@ function render(){
   $('#hello').innerHTML=`Hola, <em>${esc(P.client.first)}</em>`;
   const up=P.upcoming,secs=[];
   secs.push(installBox());
-  secs.push(`<section><p class="eb">Próximas citas</p>${up.length?up.map(b=>`<div class="card appt"><b>${esc(b.serviceName)}</b><p class="when">${longDate(b.date)} · ${h12(b.start)}</p><span class="meta">${b.dur} min · con María Teresa</span>
+  secs.push(`<section><p class="eb">Próximas citas</p>${up.length?up.map(b=>`<div class="card appt"><b>${esc(b.serviceName)}</b><p class="when">${longDate(b.date)} · ${h12(b.start)}</p><span class="meta">${b.dur} min · con María Teresa</span><span class="meta" style="display:block;margin-top:4px">Phenix Salon Suites · Suite 107 · 171 W 230th St, Bronx · <a href="https://maps.google.com/?q=171+W+230th+St+Suite+107+Bronx+NY+10463" target="_blank" rel="noopener" style="color:inherit">Cómo llegar</a></span>
     ${b.needsConsent?(b.consentSigned?'<div><span class="tag">Consentimiento firmado</span></div>':'<div><span class="tag tag--todo">Falta firmar tu consentimiento</span></div>'):''}
     <div class="acts">${b.needsConsent&&!b.consentSigned?`<button class="btn btn--copper" data-act="consent" data-id="${b.id}">Firmar</button>`:''}
     ${b.canChange?`<button class="btn btn--ghost" data-act="move" data-id="${b.id}">Cambiar</button><button class="btn btn--ghost" data-act="cancel" data-id="${b.id}">Cancelar</button>`:`<a class="btn btn--ghost" href="${wa('Hola María Teresa, necesito hablar de mi cita del '+longDate(b.date)+'.')}">Escribir a María</a>`}
@@ -147,7 +147,7 @@ function render(){
 }
 function ics(b){const[y,m,d]=b.date.split('-');const[h,mi]=b.start.split(':');const st=new Date(+y,m-1,+d,+h,+mi),en=new Date(st.getTime()+b.dur*6e4);
   const f=x=>x.getFullYear()+String(x.getMonth()+1).padStart(2,'0')+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+String(x.getMinutes()).padStart(2,'0')+'00';
-  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MT Aesthetics//ES','BEGIN:VEVENT','UID:'+b.id+'@mtaesthetics','DTSTART;TZID=America/New_York:'+f(st),'DTEND;TZID=America/New_York:'+f(en),'SUMMARY:'+b.serviceName+' · MT Aesthetics','END:VEVENT','END:VCALENDAR'].join('\r\n')}
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MT Aesthetics//ES','BEGIN:VEVENT','UID:'+b.id+'@mtaesthetics','DTSTART;TZID=America/New_York:'+f(st),'DTEND;TZID=America/New_York:'+f(en),'SUMMARY:'+b.serviceName+' · MT Aesthetics','LOCATION:Phenix Salon Suites\\, Suite 107\\, 171 W 230th St\\, Bronx\\, NY 10463','END:VEVENT','END:VCALENDAR'].join('\r\n')}
 function sheet(html){const s=$('#sheet');s.innerHTML=`<div class="p" role="dialog" aria-modal="true">${html}</div>`;s.hidden=false}
 function closeSheet(){$('#sheet').hidden=true}
 /* elegir día y hora (cambiar cita o reservar de nuevo) */
